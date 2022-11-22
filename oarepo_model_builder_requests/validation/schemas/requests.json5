@@ -1,0 +1,40 @@
+{
+  "root": {
+    "type": "object",
+    "properties": {
+      "requests": {
+        "$ref": "#/$defs/requests"
+      },
+      "settings-python": {
+        "$ref": "#/$defs/settings-python"
+      }
+    }
+  },
+  "requests": {
+    "type": "object",
+    "additionalProperties": {
+      "type": "object",
+      "properties": {
+        "custom-class-name": {
+          "type": "string"
+        },
+      }
+    }
+  },
+  "settings-python": {
+    "properties": {
+      "requests-package": {
+        "type": "string"
+      },
+      "requests-record-resolver-class": {
+        "type": "string"
+      },
+      "requests-types": {
+        "type": "string"
+      },
+      "requests-actions": {
+        "type": "string"
+      },
+    },
+  }
+}

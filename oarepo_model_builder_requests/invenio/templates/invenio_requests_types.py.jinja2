@@ -1,0 +1,19 @@
+from invenio_requests.customizations import RequestType
+
+{% for request, request_data in requests.items() %}
+from .actions import {{ request_data.action_class }}
+{% endfor %}
+
+{% for request, request_data in requests.items() %}
+class {{ request_data.type_class }}(RequestType):
+
+    type_id = "{{ request }}"
+    name = "{{ request.capitalize() }}"
+
+    available_actions = {
+        **RequestType.available_actions,
+        "accept": {{ request_data.action_class }}
+    }
+
+    allowed_topic_ref_types = ["record"] #key in topic on Request
+{% endfor %}
