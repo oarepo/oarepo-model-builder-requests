@@ -1,5 +1,5 @@
+import copy
 from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
-from oarepo_model_builder_requests.utils.requests_utils import get_action_class_name, process_requests
 
 
 class InvenioRequestsTypesBuilder(InvenioBaseClassPythonBuilder):
@@ -7,7 +7,13 @@ class InvenioRequestsTypesBuilder(InvenioBaseClassPythonBuilder):
     template = "requests-types"
 
     def finish(self, **extra_kwargs):
-        requests = getattr(self.schema, "requests", None)
+        requests = copy.deepcopy(getattr(self.schema, "requests", {}))
+        dels = []
+        for request_name, request_data in requests.items():
+            if not request_data.generate_type_class:
+                dels.append(request_name)
+        for dl in dels:
+            requests.pop(dl)
         if not requests:
             return
         current_module = self.settings.python.requests_types
@@ -16,6 +22,6 @@ class InvenioRequestsTypesBuilder(InvenioBaseClassPythonBuilder):
             python_path,
             self.template,
             current_package_name=current_module,
-            requests=process_requests(requests),
+            requests=requests,
             **extra_kwargs,
         )

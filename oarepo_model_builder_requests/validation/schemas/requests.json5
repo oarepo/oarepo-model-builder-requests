@@ -15,9 +15,36 @@
     "additionalProperties": {
       "type": "object",
       "properties": {
-        "custom-class-name": {
+        "action-class-name": {
           "type": "string"
         },
+        "action-class": {
+          "type": "string"
+        },
+        "generate-action-class": {
+          "type": "boolean"
+        },
+        "action-class-bases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type-class-name": {
+          "type": "string"
+        },
+        "type-class": {
+          "type": "string"
+        },
+        "generate-type-class": {
+          "type": "boolean"
+        },
+        "action-type-bases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     }
   },

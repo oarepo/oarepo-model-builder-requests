@@ -30,53 +30,22 @@ class InvenioModelPreprocessor(ModelPreprocessor):
             lambda: f"{settings.python.requests_package}.actions",
         )
         # requests
-        """
-        requests = getattr(schema, "requests", None)
-        if requests:
-            self.set(
-                settings.python,
-                "requests-defined",
-                lambda: True
-            )
 
-            self.set(
-                settings.python,
-                "requests-package",
-                lambda: f"{settings.package}.requests",
-            )
+        requests = getattr(schema.schema, "requests", {})
+        for request_name, request_data in requests.items():
+            # todo what if action-class-name and action-class are conflicting
+            request_data.setdefault("action-class-name", f"{camel_case(request_name)}RequestAcceptAction")
+            request_data.setdefault("action-class", f"{settings.python.requests_actions}.{request_data.action_class_name}")
+            request_data.setdefault("generate-action-class", True)
+            request_data.setdefault("action-class-bases", ["invenio_requests.customizations.AcceptAction"]) #accept action
 
-            self.set(
-                settings.python,
-                "requests-record-resolver-class",
-                lambda: f"{settings.python.requests_package}.resolvers.{settings.python.record_prefix}Resolver",
-            )
+            request_data.setdefault("type-class-name", f"{camel_case(request_name)}RequestType")
+            request_data.setdefault("type-class", f"{settings.python.requests_types}.{request_data.type_class_name}")
+            request_data.setdefault("generate-type-class", True)
+            request_data.setdefault("type-class-bases", ["invenio_requests.customizations.RequestType"]) #accept action
 
-            self.set(
-                settings.python,
-                "requests-names",
-                lambda: [request for request in requests]
-            )
+        print()
 
-            self.set(
-                settings.python,
-                "requests-action-classes",
-                lambda: [getattr(request, "custom_class_name", f"{camel_case(request)}RequestAcceptAction") for request
-                         in requests]
-            )
 
-            self.set(
-                settings.python,
-                "requests-type-classes",
-                lambda: [
-                    f"{camel_case(request)}RequestType" for request in requests
-                ]
-            )
-        else:
-            self.set(
-                settings.python,
-                "requests-defined",
-                lambda: False
-            )
-        """
 
 

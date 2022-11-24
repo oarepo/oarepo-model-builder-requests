@@ -62,10 +62,17 @@ def update_dict(dct, k, *args):
 
 
 APPROVE_REQUEST = {
-    "approve": {}
+    "approve": {"action-class-name": "ApproveMeGoddamnAction"}
 }
 PUBLISH_REQUEST = {
     "publish": {}
+}
+
+ACTUALLY_APPROVE_REQUEST = {
+    "actually-approve": {
+        "action-class": "tests.example_model.tests.requests_classes.ActuallyApproveRecordAction",
+        "generate-action-class": False,
+    }
 }
 
 APPROVE_REQUEST_CUSTOM_ACTION_NAME = {
@@ -85,14 +92,15 @@ MODEL_BASE = {
 }
 
 MODEL_ONE_REQUEST = update_dict(MODEL_BASE,
-                                    "requests",
+                                "requests",
                                 APPROVE_REQUEST
-                                    )
+                                )
 
 MODEL_TWO_REQUESTS = update_dict(MODEL_BASE,
                                  "requests",
-                                     APPROVE_REQUEST,
-                                     PUBLISH_REQUEST
+                                 APPROVE_REQUEST,
+                                 PUBLISH_REQUEST,
+                                 ACTUALLY_APPROVE_REQUEST,
                                  )
 
 
@@ -133,9 +141,8 @@ def test_model_no_request():
     with pytest.raises(FileNotFoundError):
         builder.filesystem.open(os.path.join("test", "requests", "types.py")).read()
 
+
 def test_model_one_request():
-
-
     actions, resolvers, types = generate_source(MODEL_ONE_REQUEST)
     result = """
     from invenio_requests.customizations import RequestType
@@ -157,15 +164,14 @@ class ApproveRequestType(RequestType):
 
     allowed_topic_ref_types = ["referenced_document_record"]
     """
-    #assert is_in(result, types)
+    # assert is_in(result, types)
     print()
+
 
 def test_model_two_requests():
     actions, resolvers, types = generate_source(MODEL_TWO_REQUESTS)
     pass
 
+
 def test_model_custom_action():
     pass
-
-
-

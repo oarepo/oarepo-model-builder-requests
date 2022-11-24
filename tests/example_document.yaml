@@ -14,7 +14,7 @@ oarepo:use:
 
 # normally there is no need to modify the settings bellow, but feel free
 settings:
-  package: model_requested_document
+  package: example_document
   schema-server: 'local://'
 
 #requests:
@@ -23,5 +23,12 @@ settings:
 
 
 requests:
-  approve: {"custom-class-name": ApproveMeGoddamnAction}
+  approve:
+    action-class-name: ApproveMeGoddamnAction
+  actually-approve:
+    action-class: tests.classes.ActuallyApproveRecordAction
+    generate-action-class: False
+  approve-base:
+    action-class-bases:
+      - tests.classes.ActuallyApproveRecordAction
   publish: {}

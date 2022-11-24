@@ -2,10 +2,10 @@ from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuil
 
 
 
-class InvenioRequestsTestRequestsBuilder(InvenioBaseClassPythonBuilder):
-    TYPE = "invenio_requests_tests"
-    template = "requests-tests"
-    MODULE = "tests.test_requests"
+class InvenioRequestsTestClassesBuilder(InvenioBaseClassPythonBuilder):
+    TYPE = "invenio_requests_classes"
+    template = "requests-classes"
+    MODULE = "tests.classes"
 
     def finish(self, **extra_kwargs):
         requests = getattr(self.schema, "requests", None)
@@ -15,6 +15,5 @@ class InvenioRequestsTestRequestsBuilder(InvenioBaseClassPythonBuilder):
         self.process_template(
             python_path,
             self.template,
-            requests=requests,
             **extra_kwargs,
         )
