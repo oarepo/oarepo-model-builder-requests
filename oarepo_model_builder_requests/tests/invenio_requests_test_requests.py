@@ -1,7 +1,6 @@
 from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
 
 
-
 class InvenioRequestsTestRequestsBuilder(InvenioBaseClassPythonBuilder):
     TYPE = "invenio_requests_tests"
     template = "requests-tests"

@@ -1,7 +1,4 @@
-from oarepo_model_builder.builders import process
 from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
-
-from oarepo_model_builder_requests.utils.requests_utils import process_requests
 
 
 class InvenioRequestsConfigBuilder(InvenioBaseClassPythonBuilder):

@@ -23,12 +23,20 @@ settings:
 
 
 requests:
-  approve:
+  custom-action-name:
     action-class-name: ApproveMeGoddamnAction
-  actually-approve:
-    action-class: tests.classes.ActuallyApproveRecordAction
+  custom-action:  #custom action which actually changes status on the request topic too
+    action-class: tests.requests_actions.ActuallyApproveRecordAction
     generate-action-class: False
-  approve-base:
+  custom-action-base:
     action-class-bases:
-      - tests.classes.ActuallyApproveRecordAction
-  publish: {}
+      - tests.requests_actions.ActuallyApproveRecordAction
+  simple: {}
+  custom-type-name:
+    type-class-name: MyTypeCustomName
+  custom-type:
+    type-class: tests.requests_types.MyTypeCustomClass
+    generate-type-class: False
+  custom-type-base:
+    type-class-bases:
+      - tests.requests_types.MyTypeCustomClass

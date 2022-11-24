@@ -52,7 +52,7 @@ def test_custom_action(app, identity_simple, identity_simple_2, submit_request, 
     """
     # uses user defined action which actually changes the status of the refereneced record
     request = submit_request(identity_simple, data=request_record_input_data, topic={{ python.record_prefix_snake }},
-                             request_type=ActuallyApproveRequestType, receiver=users[1])
+                             request_type=CustomActionRequestType, receiver=users[1])
     assert {{ python.proxies_current_service|base_name }}.read(identity_simple, {{ python.record_prefix_snake }}["id"])["metadata"][
                "status"] == "not approved"
     request_id = request.id
@@ -89,7 +89,7 @@ def test_inherited_action(app, identity_simple, identity_simple_2, submit_reques
     """
     # uses user defined action which actually changes the status of the refereneced record
     request = submit_request(identity_simple, data=request_record_input_data, topic={{ python.record_prefix_snake }},
-                             request_type=ApproveBaseRequestType, receiver=users[1])
+                             request_type=CustomActionBaseRequestType, receiver=users[1])
     assert {{ python.proxies_current_service|base_name }}.read(identity_simple, {{ python.record_prefix_snake }}["id"])["metadata"][
                "status"] == "not approved"
     request_id = request.id

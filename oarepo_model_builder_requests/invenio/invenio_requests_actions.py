@@ -2,7 +2,6 @@ import copy
 
 from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
 
-from oarepo_model_builder_requests.utils.requests_utils import process_requests
 
 class InvenioRequestsActionsBuilder(InvenioBaseClassPythonBuilder):
     TYPE = "invenio_requests_actions"
@@ -27,5 +26,3 @@ class InvenioRequestsActionsBuilder(InvenioBaseClassPythonBuilder):
             requests=requests,
             **extra_kwargs,
         )
-
-

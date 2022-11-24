@@ -39,7 +39,7 @@
         "generate-type-class": {
           "type": "boolean"
         },
-        "action-type-bases": {
+        "type-class-bases": {
           "type": "array",
           "items": {
             "type": "string"
