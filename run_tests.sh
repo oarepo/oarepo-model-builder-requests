@@ -2,10 +2,9 @@
 set -e
 
 pytest tests/test_source_generation.py
-
 MODEL="example_document"
 VENV=".model_venv"
-cd $(dirname $0)/..
+#cd $(dirname $0)/..
 if test -d $MODEL; then
 	rm -rf $MODEL
 fi
