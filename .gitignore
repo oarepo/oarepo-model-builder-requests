@@ -88,3 +88,4 @@ example_document/
 dist/
 
 .model_venv/
+.vscode
