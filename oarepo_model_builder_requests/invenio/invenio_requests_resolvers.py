@@ -11,10 +11,10 @@ class InvenioRequestsResolversBuilder(InvenioBaseClassPythonBuilder):
         requests = getattr(self.schema, "requests", None)
         if not requests:
             return
-        python_path = self.class_to_path(self.settings.python[self.class_config])
+        python_path = self.class_to_path(self.current_model[self.class_config])
         self.process_template(
             python_path,
             self.template,
-            current_package_name=package_name(self.settings.python[self.class_config]),
+            current_package_name=package_name(self.current_model[self.class_config]),
             **extra_kwargs,
         )

@@ -2,9 +2,9 @@ from flask_security.utils import hash_password
 from invenio_app.factory import create_api
 from invenio_records_resources.services.uow import UnitOfWork, RecordCommitOp
 from invenio_requests.customizations import CommentEventType, LogEventType
-from {{ python.record_class|package_name }} import {{ python.record_class|base_name }}
+from {{ current_model.record_class|package_name }} import {{ current_model.record_class|base_name }}
 from flask_principal import Identity, Need, UserNeed
-from {{ python.proxies_current_service|package_name }} import {{ python.proxies_current_service|base_name }}
+from {{ current_model.proxies_current_service|package_name }} import {{ current_model.proxies_current_service|base_name }}
 import pytest
 from invenio_requests.proxies import current_requests
 from invenio_requests.records.api import RequestEventFormat
@@ -122,7 +122,7 @@ def users(app):
 
 
 @pytest.fixture(scope="function")
-def request_record_input_data({{ python.record_prefix_snake }}):
+def request_record_input_data({{ current_model.record_prefix_snake }}):
     """Input data to a Request record."""
     ret = {"title": "Doc1 approval", "payload": {
         "content": "Can you approve my document doc1 please?",
@@ -131,13 +131,13 @@ def request_record_input_data({{ python.record_prefix_snake }}):
     return ret
 
 @pytest.fixture(scope="function")
-def {{ python.record_prefix_snake }}(app, db):
+def {{ current_model.record_prefix_snake }}(app, db):
     # return record
     with UnitOfWork(db.session) as uow:
-        record = {{ python.record_class|base_name }}.create({"metadata": {
+        record = {{ current_model.record_class|base_name }}.create({"metadata": {
             "title": "doc1",
             "status": "not approved",
         }})
-        uow.register(RecordCommitOp(record, {{ python.proxies_current_service|base_name }}.indexer, True))
+        uow.register(RecordCommitOp(record, {{ current_model.proxies_current_service|base_name }}.indexer, True))
         uow.commit()
         return record

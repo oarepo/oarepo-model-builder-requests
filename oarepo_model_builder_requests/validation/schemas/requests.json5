@@ -48,7 +48,7 @@
       }
     }
   },
-  "settings-python": {
+  "model-properties": {
     "properties": {
       "requests-package": {
         "type": "string"

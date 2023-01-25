@@ -6,15 +6,15 @@ from invenio_requests.customizations.event_types import CommentEventType
 {% for request, request_data in requests.items() %}
 from {{ request_data.type_class|package_name }} import {{ request_data.type_class|base_name }}
 {% endfor %}
-from {{ python.proxies_current_service|package_name }} import {{ python.proxies_current_service|base_name }}
+from {{ current_model.proxies_current_service|package_name }} import {{ current_model.proxies_current_service|base_name }}
 
 {% for request, request_data in requests.items() %}
 def test_{{ request.replace('-', '_') }}_request(app, identity_simple, identity_simple_2, submit_request, request_events_service,
-                         requests_service, {{ python.record_prefix_snake }}, users, request_record_input_data):
+                         requests_service, {{ current_model.record_prefix_snake }}, users, request_record_input_data):
 
-    request = submit_request(identity_simple, data=request_record_input_data, topic={{ python.record_prefix_snake }},
+    request = submit_request(identity_simple, data=request_record_input_data, topic={{ current_model.record_prefix_snake }},
                              request_type={{ request_data.type_class|base_name }}, receiver=users[1])
-    #assert {{ python.proxies_current_service|base_name }}.read(identity_simple, {{ python.record_prefix_snake }}["id"])["metadata"][
+    #assert {{ current_model.proxies_current_service|base_name }}.read(identity_simple, {{ current_model.record_prefix_snake }}["id"])["metadata"][
     #           "status"] == "not approved"
     request_id = request.id
 
@@ -30,7 +30,7 @@ def test_{{ request.replace('-', '_') }}_request(app, identity_simple, identity_
         requests_service.execute_action(identity_simple, request_id, "accept", payload)
     # the reciever can
     approve_response = requests_service.execute_action(identity_simple_2, request_id, "accept", payload)
-    #assert {{ python.proxies_current_service|base_name }}.read(identity_simple, {{ python.record_prefix_snake }}["id"])["metadata"][
+    #assert {{ current_model.proxies_current_service|base_name }}.read(identity_simple, {{ current_model.record_prefix_snake }}["id"])["metadata"][
     #           "status"] == "approved"
     request = approve_response._request
     RequestEvent.index.refresh()
@@ -45,15 +45,15 @@ def test_{{ request.replace('-', '_') }}_request(app, identity_simple, identity_
 {% endfor %}
 
 def test_custom_action(app, identity_simple, identity_simple_2, submit_request, request_events_service,
-                         requests_service, {{ python.record_prefix_snake }}, users, request_record_input_data):
+                         requests_service, {{ current_model.record_prefix_snake }}, users, request_record_input_data):
     """
     Tests whether user defined action is correctly imported and ran and whether a change is actually saved on the
     record.
     """
     # uses user defined action which actually changes the status of the refereneced record
-    request = submit_request(identity_simple, data=request_record_input_data, topic={{ python.record_prefix_snake }},
+    request = submit_request(identity_simple, data=request_record_input_data, topic={{ current_model.record_prefix_snake }},
                              request_type=CustomActionRequestType, receiver=users[1])
-    assert {{ python.proxies_current_service|base_name }}.read(identity_simple, {{ python.record_prefix_snake }}["id"])["metadata"][
+    assert {{ current_model.proxies_current_service|base_name }}.read(identity_simple, {{ current_model.record_prefix_snake }}["id"])["metadata"][
                "status"] == "not approved"
     request_id = request.id
 
@@ -69,7 +69,7 @@ def test_custom_action(app, identity_simple, identity_simple_2, submit_request, 
         requests_service.execute_action(identity_simple, request_id, "accept", payload)
     # the reciever can
     approve_response = requests_service.execute_action(identity_simple_2, request_id, "accept", payload)
-    assert {{ python.proxies_current_service|base_name }}.read(identity_simple, {{ python.record_prefix_snake }}["id"])["metadata"][
+    assert {{ current_model.proxies_current_service|base_name }}.read(identity_simple, {{ current_model.record_prefix_snake }}["id"])["metadata"][
                "status"] == "approved"
     request = approve_response._request
     RequestEvent.index.refresh()
@@ -83,14 +83,14 @@ def test_custom_action(app, identity_simple, identity_simple_2, submit_request, 
     assert "Ok doc1 is good enough and therefore approved." == hits[2]["payload"]["content"]
 
 def test_inherited_action(app, identity_simple, identity_simple_2, submit_request, request_events_service,
-                         requests_service, {{ python.record_prefix_snake }}, users, request_record_input_data):
+                         requests_service, {{ current_model.record_prefix_snake }}, users, request_record_input_data):
     """
     Tests whether generated action inherited from parent class executes correctly
     """
     # uses user defined action which actually changes the status of the refereneced record
-    request = submit_request(identity_simple, data=request_record_input_data, topic={{ python.record_prefix_snake }},
+    request = submit_request(identity_simple, data=request_record_input_data, topic={{ current_model.record_prefix_snake }},
                              request_type=CustomActionBaseRequestType, receiver=users[1])
-    assert {{ python.proxies_current_service|base_name }}.read(identity_simple, {{ python.record_prefix_snake }}["id"])["metadata"][
+    assert {{ current_model.proxies_current_service|base_name }}.read(identity_simple, {{ current_model.record_prefix_snake }}["id"])["metadata"][
                "status"] == "not approved"
     request_id = request.id
 
@@ -106,7 +106,7 @@ def test_inherited_action(app, identity_simple, identity_simple_2, submit_reques
         requests_service.execute_action(identity_simple, request_id, "accept", payload)
     # the reciever can
     approve_response = requests_service.execute_action(identity_simple_2, request_id, "accept", payload)
-    assert {{ python.proxies_current_service|base_name }}.read(identity_simple, {{ python.record_prefix_snake }}["id"])["metadata"][
+    assert {{ current_model.proxies_current_service|base_name }}.read(identity_simple, {{ current_model.record_prefix_snake }}["id"])["metadata"][
                "status"] == "approved"
     request = approve_response._request
     RequestEvent.index.refresh()

@@ -3,24 +3,13 @@ model:
     metadata:
       properties:  # to add yout own properties, remove this line and uncomment the next one
         title:
-          type: fulltext
+          type: keyword
         status:
           type: keyword
-
-
-oarepo:use:
-  - invenio
-
-
-# normally there is no need to modify the settings bellow, but feel free
-settings:
+  use:
+    - invenio
   package: example_document
   schema-server: 'local://'
-
-#requests:
-# approve:
-#   record-alias: model_requested_document
-
 
 requests:
   custom-action-name:

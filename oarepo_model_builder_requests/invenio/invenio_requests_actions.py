@@ -17,7 +17,7 @@ class InvenioRequestsActionsBuilder(InvenioBaseClassPythonBuilder):
             requests.pop(dl)
         if not requests:
             return
-        current_module = self.settings.python.requests_actions
+        current_module = self.current_model.requests_actions
         python_path = self.module_to_path(current_module)
         self.process_template(
             python_path,

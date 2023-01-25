@@ -9,7 +9,7 @@ class InvenioRequestsConfigBuilder(InvenioBaseClassPythonBuilder):
         requests = getattr(self.schema, "requests", None)
         if not requests:
             return
-        current_module = self.settings.python.config_package
+        current_module = self.current_model.config_package
         python_path = self.module_to_path(current_module)
         self.process_template(
             python_path,
