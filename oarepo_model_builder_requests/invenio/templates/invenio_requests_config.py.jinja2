@@ -8,5 +8,5 @@ from invenio_users_resources.resolvers import UserResolver
 REQUESTS_REGISTERED_TYPES = [{% for request, request_data in requests.items() %}{{ request_data.type_class|base_name }}, {% endfor %}]
 REQUESTS_ENTITY_RESOLVERS = [
         UserResolver(),
-        {{ current_model.requests_record_resolver_class|base_name }}(record_cls={{ current_model.record_class|base_name }}, service_id="{{ settings.model_name }}")
+        {{ current_model.requests_record_resolver_class|base_name }}(record_cls={{ current_model.record_class|base_name }}, service_id="{{ current_model.service_id }}")
     ]

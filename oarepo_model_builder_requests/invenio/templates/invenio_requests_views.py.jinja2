@@ -1,4 +1,4 @@
-def init_addons_requests(state):
+def init_addons_{{ current_model.extension_suffix }}_requests(state):
     app = state.app
     requests = app.extensions["invenio-requests"]
 

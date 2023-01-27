@@ -6,28 +6,29 @@ class InvenioModelPreprocessor(ModelPreprocessor):
     TYPE = "invenio_requests"
 
     def transform(self, schema, settings):
+        model = schema.current_model
         self.set(
-            settings.python,
+            model,
             "requests-package",
-            lambda: f"{settings.package}.requests",
+            lambda: f"{model.package}.requests",
         )
 
         self.set(
-            settings.python,
+            model,
             "requests-record-resolver-class",
-            lambda: f"{settings.python.requests_package}.resolvers.{settings.python.record_prefix}Resolver",
+            lambda: f"{model.requests_package}.resolvers.{model.record_prefix}Resolver",
         )
 
         self.set(
-            settings.python,
+            model,
             "requests-types",
-            lambda: f"{settings.python.requests_package}.types",
+            lambda: f"{model.requests_package}.types",
         )
 
         self.set(
-            settings.python,
+            model,
             "requests-actions",
-            lambda: f"{settings.python.requests_package}.actions",
+            lambda: f"{model.requests_package}.actions",
         )
         # requests
 
@@ -39,7 +40,7 @@ class InvenioModelPreprocessor(ModelPreprocessor):
             )
             request_data.setdefault(
                 "action-class",
-                f"{settings.python.requests_actions}.{request_data.action_class_name}",
+                f"{model.requests_actions}.{request_data.action_class_name}",
             )
             request_data.setdefault("generate-action-class", True)
             request_data.setdefault(
@@ -51,7 +52,7 @@ class InvenioModelPreprocessor(ModelPreprocessor):
             )
             request_data.setdefault(
                 "type-class",
-                f"{settings.python.requests_types}.{request_data.type_class_name}",
+                f"{model.requests_types}.{request_data.type_class_name}",
             )
             request_data.setdefault("generate-type-class", True)
             request_data.setdefault(

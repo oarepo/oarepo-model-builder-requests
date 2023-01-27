@@ -100,13 +100,14 @@ CUSTOM_TYPE_BASE_CLASS = {
 }
 
 MODEL_BASE = {
-    "oarepo:use": "invenio",
     "model": {
         "properties": {
             "title": {"type": "fulltext+keyword"},
             "status": {"type": "keyword"},
-        }
+        },
+        "use": "invenio"
     },
+
 }
 """
 MODEL_ONE_REQUEST = update_dict(MODEL_BASE,
