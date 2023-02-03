@@ -1,14 +1,17 @@
 from invenio_records_resources.proxies import current_service_registry
 from invenio_records_resources.services.uow import RecordCommitOp
 from invenio_requests.resolvers.registry import ResolverRegistry
-{% for request, request_data in requests.items() %}
-{% for action_class_base in request_data.action_class_bases%}
-from {{ action_class_base|package_name }} import {{ action_class_base|base_name }}
+{% for request_data in requests.values() %}
+{% if request_data.approve_action_generate %}
+{% for approve_action_base in request_data.approve_action_bases %}
+from {{ approve_action_base|package_name }} import {{ approve_action_base|base_name }}
 {% endfor %}
+{% endif %}
 {% endfor %}
 
-{% for request, request_data in requests.items() %}
-class {{ request_data.action_class_name }}{% if request_data.action_class_bases %}({% for action_class_base in request_data.action_class_bases%}{{ action_class_base|base_name }}{{ ", " if not loop.last else "" }}{% endfor %}){% endif %}:
+{% for request_data in requests.values() %}
+{% if request_data.approve_action_generate %}
+class {{ request_data.approve_action_class|base_name }}{% if request_data.approve_action_bases %}({% for approve_action_base in request_data.approve_action_bases%}{{ approve_action_base|base_name }}{{ ", " if not loop.last else "" }}{% endfor %}){% endif %}:
 
     def execute(self, identity, uow):
         topic = self.request.topic.resolve()
@@ -23,4 +26,5 @@ class {{ request_data.action_class_name }}{% if request_data.action_class_bases 
             raise KeyError(f"topic {topic} service not found")
         uow.register(RecordCommitOp(topic, topic_service.indexer))
         super().execute(identity, uow)
+{% endif %}
 {% endfor %}

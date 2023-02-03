@@ -34,29 +34,24 @@ class InvenioModelPreprocessor(ModelPreprocessor):
 
         requests = getattr(schema.schema, "requests", {})
         for request_name, request_data in requests.items():
-            # todo what if action-class-name and action-class are conflicting
             request_data.setdefault(
-                "action-class-name", f"{camel_case(request_name)}RequestAcceptAction"
+                "class",
+                f"{model.requests_types}.{camel_case(request_name)}RequestType",
             )
+            request_data.setdefault("generate", True)
             request_data.setdefault(
-                "action-class",
-                f"{model.requests_actions}.{request_data.action_class_name}",
-            )
-            request_data.setdefault("generate-action-class", True)
-            request_data.setdefault(
-                "action-class-bases", ["invenio_requests.customizations.AcceptAction"]
+                "bases", ["invenio_requests.customizations.RequestType"]
             )  # accept action
-
-            request_data.setdefault(
-                "type-class-name", f"{camel_case(request_name)}RequestType"
+            # this needs to be updated if other types of actions are considered
+            request_data.setdefault("actions", {"approve": {}})
+            for action_name, action_data in request_data.actions.items():
+                action_data.setdefault(
+                    "class",
+                    f"{model.requests_actions}.{camel_case(request_name)}RequestAcceptAction",
+                )
+                action_data.setdefault("generate", True)
+                action_data.setdefault(
+                    "bases", ["invenio_requests.customizations.AcceptAction"]
             )
-            request_data.setdefault(
-                "type-class",
-                f"{model.requests_types}.{request_data.type_class_name}",
-            )
-            request_data.setdefault("generate-type-class", True)
-            request_data.setdefault(
-                "type-class-bases", ["invenio_requests.customizations.RequestType"]
-            )  # accept action
 
         print()

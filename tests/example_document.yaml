@@ -12,20 +12,21 @@ model:
   schema-server: 'local://'
 
 requests:
-  custom-action-name:
-    action-class-name: ApproveMeGoddamnAction
-  custom-action:  #custom action which actually changes status on the request topic too
-    action-class: tests.requests_actions.ActuallyApproveRecordAction
-    generate-action-class: False
-  custom-action-base:
-    action-class-bases:
-      - tests.requests_actions.ActuallyApproveRecordAction
-  simple: {}
-  custom-type-name:
-    type-class-name: MyTypeCustomName
   custom-type:
-    type-class: tests.requests_types.MyTypeCustomClass
-    generate-type-class: False
+    class: tests.requests_types.MyTypeCustomClass
+    generate: False
   custom-type-base:
-    type-class-bases:
+    bases:
       - tests.requests_types.MyTypeCustomClass
+  custom-approve-action:
+    actions:
+      approve:
+        class: tests.requests_actions.ActuallyApproveRecordAction
+        generate: False
+  custom-approve-action-bases:
+    actions:
+      approve:
+        bases:
+          - tests.requests_actions.ActuallyApproveRecordAction
+  simple: {}
+

@@ -1,20 +1,24 @@
-{% for request, request_data in requests.items() %}
-from {{ request_data.action_class|package_name }} import {{ request_data.action_class|base_name }}
-    {% for type_class_base in request_data.type_class_bases%}
-from {{ type_class_base|package_name }} import {{ type_class_base|base_name }}
+{% for request_data in requests.values() %}
+{% if request_data.type_generate %}
+from {{ request_data.approve_action_class|package_name }} import {{ request_data.approve_action_class|base_name }}
+    {% for type_base in request_data.type_bases %}
+from {{ type_base|package_name }} import {{ type_base|base_name }}
     {% endfor %}
+{% endif %}
 {% endfor %}
 
 {% for request, request_data in requests.items() %}
-class {{ request_data.type_class_name }}{% if request_data.type_class_bases %}({% for type_class_base in request_data.type_class_bases%}{{ type_class_base|base_name }}{{ ", " if not loop.last else "" }}{% endfor %}){% endif %}:
+{% if request_data.type_generate %}
+class {{ request_data.type_class|base_name }}{% if request_data.type_bases %}({% for type_base in request_data.type_bases%}{{ type_base|base_name }}{{ ", " if not loop.last else "" }}{% endfor %}){% endif %}:
 
     type_id = "{{ request }}"
     name = "{{ request.capitalize() }}"
 
     available_actions = {
         **RequestType.available_actions,
-        "accept": {{ request_data.action_class|base_name }}
+        "accept": {{ request_data.approve_action_class|base_name }}
     }
 
     allowed_topic_ref_types = ["record"] #key in topic on Request
+{% endif %}
 {% endfor %}
