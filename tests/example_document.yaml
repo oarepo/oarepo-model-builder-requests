@@ -13,20 +13,20 @@ model:
 
 requests:
   custom-type:
-    class: tests.requests_types.MyTypeCustomClass
+    class: tests.requests.requests_types.MyTypeCustomClass
     generate: False
   custom-type-base:
     bases:
-      - tests.requests_types.MyTypeCustomClass
+      - tests.requests.requests_types.MyTypeCustomClass
   custom-approve-action:
     actions:
       approve:
-        class: tests.requests_actions.ActuallyApproveRecordAction
+        class: tests.requests.requests_actions.ActuallyApproveRecordAction
         generate: False
   custom-approve-action-bases:
     actions:
       approve:
         bases:
-          - tests.requests_actions.ActuallyApproveRecordAction
+          - tests.requests.requests_actions.ActuallyApproveRecordAction
   simple: {}
 

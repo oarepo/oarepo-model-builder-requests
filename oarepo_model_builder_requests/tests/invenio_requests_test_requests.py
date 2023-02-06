@@ -4,4 +4,4 @@ from oarepo_model_builder_requests.invenio.invenio_requests_builder import Inven
 class InvenioRequestsTestRequestsBuilder(InvenioRequestsPythonBuilder):
     TYPE = "invenio_requests_tests"
     template = "requests-tests"
-    MODULE = "tests.test_requests"
+    MODULE = "tests.requests.test_requests"

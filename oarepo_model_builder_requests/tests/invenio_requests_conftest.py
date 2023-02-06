@@ -4,5 +4,5 @@ from oarepo_model_builder_requests.invenio.invenio_requests_builder import Inven
 class InvenioRequestsConftestBuilder(InvenioRequestsPythonBuilder):
     TYPE = "invenio_requests_conftest"
     template = "requests-conftest"
-    MODULE = "tests.conftest"
+    MODULE = "tests.requests.conftest"
 
