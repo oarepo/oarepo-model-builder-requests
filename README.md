@@ -1,30 +1,50 @@
 # OARepo model builder requests
 Plugin for oarepo-model-builder to allow specifying requests 
-tied to the base model. <br>
+tied to the base model, based on invenio requests. <br>
 
-Requests are requests for an action concerning an instance of the model (called topic), for example to publish the topic. The plugin is based on original invenio requests, for now allowing only the accept action to be customized.
-Applicable requests can be added to the model through "requests" section in the yaml file of the model. There can be any number of them.
-<br>
-Options:
+Requests are requests for an action concerning an instance of the model (called 
+topic in this context), 
+for example to publish the topic.
+
+The requests are specified as request types (each type has its own class). 
+Each request type has pre-specified actions from the invenio framework.<br> 
+The plugin allows to customize the accept action.
+<br><br>
+By default, along with changing the request status,
+the generated accept action fetches the associated record. It's up to the 
+developer to decide what to do with it further.
+<br><br>
+Types of requests can be added to the model through "requests" section 
+in the yaml file of the model. There can be any number of them.<br>
+Options in the yaml:
 <ul>
 <li>
-"action-class": Specify class for the accept action done by the request. 
-By default, a template action class
-which fetches the topic and saves it is generated. The action done on the topic has to be defined by the user.
+"class": Class for the Type of the request. 
+Used if the user wants to use a custom request type class.
 </li>
 <li>
-"action-class-name": Specify the name of the generated template action class. If not specified, request name in camel case + "AcceptAction" is used.
+"generate": True by defualt, False is 
+typically used when user provides custom Type class.
 </li>
 <li>
-"action-class-bases": Specify the base classes from which the 
-generated template action classes inherits. 
-By default it's [invenio_requests.customizations.AcceptAction].
+"bases":
+Base classes for the Type class.
 </li>
 <li>
-"generate-action-class": Tell the model builder whether it should generate the accept action class templete. True by default.
+"actions":
+A list of customized actions by this type of request. 
+Only the accept action is supported for now.
+<ul>
+<li>
+"class": Analogous to type class for the action. By default it's [invenio_requests.customizations.AcceptAction].
 </li>
 <li>
-RequestType allows the same customizations, the name of the properties are analogical after replacing "action" with "type".
+"generate": Analogous to type class for the action.
+</li>
+<li>
+"bases": Analogous to type class bases for the action.
+</li>
+</ul>
 </li>
 </ul>
 
