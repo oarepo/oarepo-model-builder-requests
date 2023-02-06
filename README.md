@@ -1,8 +1,8 @@
 # OARepo model builder requests
-Plugin ("wrapper") for oarepo-model-builder to allow specifying requests 
-tied to the model. <br>
+Plugin for oarepo-model-builder to allow specifying requests 
+tied to the base model. <br>
 
-Requests are requests for an action concerning an instance of the model (called topic), for example to publish the topic.
+Requests are requests for an action concerning an instance of the model (called topic), for example to publish the topic. The plugin is based on original invenio requests, for now allowing only the accept action to be customized.
 Applicable requests can be added to the model through "requests" section in the yaml file of the model. There can be any number of them.
 <br>
 Options:
