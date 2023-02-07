@@ -29,15 +29,14 @@ typically used when user provides custom Type class.
 * `bases`
 Base classes for the Type class.
 * `actions`
-A list of customized actions by this type of request. 
-Only the accept action is supported for now.
+A list of customized actions by this type of request. Only the accept action is supported for now.
 
-** `class` Analogous to type class for the action. By default 
+  * `class` Analogous to type class for the action. By default 
 it's [invenio_requests.customizations.AcceptAction](https://github.com/inveniosoftware/invenio-requests/blob/master/invenio_requests/customizations/actions.py).
 
-** `generate` Analogous to type class for the action.
+  * `generate` Analogous to type class for the action.
 
-** `bases` Analogous to type class bases for the action.
+  * `bases` Analogous to type class bases for the action.
 
 
 See model_requested_document.yaml in tests for usage example. 
