@@ -4,7 +4,7 @@ tied to the base model, based on invenio requests. <br>
 
 Requests are requests for an action concerning an instance of the model (called 
 topic in this context), 
-for example to publish the topic.
+for example to publish the topic. 
 
 The requests are specified as request types (each type has its own class). 
 Each request type has pre-specified actions from the invenio framework.
@@ -38,7 +38,32 @@ it's [invenio_requests.customizations.AcceptAction](https://github.com/invenioso
 
   * `bases` Analogous to type class bases for the action.
 
+## Examples
 
-See model_requested_document.yaml in tests for usage example. 
-What is done with the topic if the template accept action class is generated has to be specified manually in the 
-requests/actions.py file.
+For example, the requests plugin can be used for approving
+a thesis. The accept action can be used for approval.
+A simple yaml entry at the root level can be used:
+```yaml
+requests:
+  approve-thesis: {}
+```
+This generates all the basic files. The generated action does
+the predefined changes in the default invenio base class, specifically
+changes the request status, and provides a template for modifying
+the associated thesis record (topic). The template fetches the record and
+saves changes on it. What to do with the thesis during is up to the developer.
+They have to replace this code with their own implementation.
+```python
+## todo - do something with the record
+# topic["status"] = "accepted"
+##
+```
+Alternatively, they can define the accept action class on their own and import
+it instead of generating.
+```yaml
+requests:
+  approve-thesis:
+    class: thesis.requests.ApproveAction
+    generate: False
+```
+
