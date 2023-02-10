@@ -122,13 +122,10 @@ def request_record_input_data({{ current_model.record_prefix_snake }}):
     return ret
 
 @pytest.fixture(scope="function")
-def {{ current_model.record_prefix_snake }}(app, db):
+def {{ current_model.record_prefix_snake }}(app, db, sample_metadata_list):
     # return record
     with UnitOfWork(db.session) as uow:
-        record = {{ current_model.record_class|base_name }}.create({"metadata": {
-            "title": "doc1",
-            "status": "not approved",
-        }})
+        record = {{ current_model.record_class|base_name }}.create(sample_metadata_list[0])
         uow.register(RecordCommitOp(record, {{ current_model.proxies_current_service|base_name }}.indexer, True))
         uow.commit()
         return record

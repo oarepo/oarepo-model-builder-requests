@@ -3,43 +3,56 @@ from invenio_records_resources.services.errors import PermissionDeniedError
 from invenio_requests.records.api import RequestEvent, RequestEventFormat
 from invenio_requests.customizations.event_types import CommentEventType
 
-{% for request, request_data in requests.items() %}
-from {{ request_data.type_class|package_name }} import {{ request_data.type_class|base_name }}
-{% endfor %}
-from {{ current_model.proxies_current_service|package_name }} import {{ current_model.proxies_current_service|base_name }}
-
-{% for request, request_data in requests.items() %}
-def test_{{ request.replace('-', '_') }}_request(app, identity_simple, identity_simple_2, submit_request, request_events_service,
-                         requests_service, {{ current_model.record_prefix_snake }}, users, request_record_input_data):
-
-    request = submit_request(identity_simple, data=request_record_input_data, topic={{ current_model.record_prefix_snake }},
-                             request_type={{ request_data.type_class|base_name }}, receiver=users[1])
-    #assert {{ current_model.proxies_current_service|base_name }}.read(identity_simple, {{ current_model.record_prefix_snake }}["id"])["metadata"][
-    #           "status"] == "not approved"
-    request_id = request.id
+def test_custom_type_request(
+    app,
+    identity_simple,
+    identity_simple_2,
+    submit_request,
+    request_events_service,
+    requests_service,
+    example_document,
+    users,
+    request_record_input_data,
+):
+    request_types = app.extensions["invenio-requests"].request_type_registry
+    for request_type in request_types:
+        request = submit_request(
+            identity_simple,
+            data=request_record_input_data,
+            topic=example_document,
+            request_type=request_type,
+            receiver=users[1],
+        )
+        # assert current_service.read(identity_simple, example_document["id"])["metadata"][
+        #           "status"] == "not approved"
+        request_id = request.id
 
     # approve request by receiver
-    payload = {
-        "payload": {
-            "content": "Ok doc1 is good enough and therefore approved.",
-            "format": RequestEventFormat.HTML.value,
+        payload = {
+            "payload": {
+                "content": "Ok doc1 is good enough and therefore approved.",
+                "format": RequestEventFormat.HTML.value,
+            }
         }
-    }
-    # the sender can't approve the request
-    with pytest.raises(PermissionDeniedError):
-        requests_service.execute_action(identity_simple, request_id, "accept", payload)
-    # the reciever can
-    approve_response = requests_service.execute_action(identity_simple_2, request_id, "accept", payload)
-    #assert {{ current_model.proxies_current_service|base_name }}.read(identity_simple, {{ current_model.record_prefix_snake }}["id"])["metadata"][
-    #           "status"] == "approved"
-    request = approve_response._request
-    RequestEvent.index.refresh()
+        # the sender can't approve the request
+        with pytest.raises(PermissionDeniedError):
+            requests_service.execute_action(identity_simple, request_id, "accept", payload)
+        # the reciever can
+        approve_response = requests_service.execute_action(
+            identity_simple_2, request_id, "accept", payload
+        )
+        # assert current_service.read(identity_simple, example_document["id"])["metadata"][
+        #           "status"] == "approved"
+        request = approve_response._request
+        RequestEvent.index.refresh()
 
-    assert "accepted" == request.status
-    events = request_events_service.search(identity_simple, request_id)
-    assert 3 == events.total  # two comments and accept log
-    hits = list(events.hits)
-    assert CommentEventType.type_id == hits[0]["type"]
-    assert "Can you approve my document doc1 please?" == hits[0]["payload"]["content"]
-    assert "Ok doc1 is good enough and therefore approved." == hits[2]["payload"]["content"]
-{% endfor %}
+        assert "accepted" == request.status
+        events = request_events_service.search(identity_simple, request_id)
+        assert 3 == events.total  # two comments and accept log
+        hits = list(events.hits)
+        assert CommentEventType.type_id == hits[0]["type"]
+        assert "Can you approve my document doc1 please?" == hits[0]["payload"]["content"]
+        assert (
+            "Ok doc1 is good enough and therefore approved."
+            == hits[2]["payload"]["content"]
+        )
