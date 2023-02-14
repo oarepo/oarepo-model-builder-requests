@@ -10,7 +10,7 @@ def test_custom_type_request(
     submit_request,
     request_events_service,
     requests_service,
-    example_document,
+    example_{{ current_model.record_prefix_snake }},
     users,
     request_record_input_data,
 ):
@@ -19,11 +19,11 @@ def test_custom_type_request(
         request = submit_request(
             identity_simple,
             data=request_record_input_data,
-            topic=example_document,
+            topic=example_{{ current_model.record_prefix_snake }},
             request_type=request_type,
             receiver=users[1],
         )
-        # assert current_service.read(identity_simple, example_document["id"])["metadata"][
+        # assert current_service.read(identity_simple, example_{{ current_model.record_prefix_snake }}["id"])["metadata"][
         #           "status"] == "not approved"
         request_id = request.id
 
@@ -41,7 +41,7 @@ def test_custom_type_request(
         approve_response = requests_service.execute_action(
             identity_simple_2, request_id, "accept", payload
         )
-        # assert current_service.read(identity_simple, example_document["id"])["metadata"][
+        # assert current_service.read(identity_simple, example_{{ current_model.record_prefix_snake }}["id"])["metadata"][
         #           "status"] == "approved"
         request = approve_response._request
         RequestEvent.index.refresh()

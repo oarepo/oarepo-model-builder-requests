@@ -113,7 +113,7 @@ def users(app):
 
 
 @pytest.fixture(scope="function")
-def request_record_input_data({{ current_model.record_prefix_snake }}):
+def request_record_input_data():
     """Input data to a Request record."""
     ret = {"title": "Doc1 approval", "payload": {
         "content": "Can you approve my document doc1 please?",
@@ -122,7 +122,7 @@ def request_record_input_data({{ current_model.record_prefix_snake }}):
     return ret
 
 @pytest.fixture(scope="function")
-def {{ current_model.record_prefix_snake }}(app, db, sample_metadata_list):
+def example_{{ current_model.record_prefix_snake }}(app, db, sample_metadata_list):
     # return record
     with UnitOfWork(db.session) as uow:
         record = {{ current_model.record_class|base_name }}.create(sample_metadata_list[0])
