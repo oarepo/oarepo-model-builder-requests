@@ -10,4 +10,4 @@ class MyTypeCustomClass(RequestType):
         "accept": ActuallyApproveRecordAction,
     }
 
-    allowed_topic_ref_types = ["record"]
+    allowed_topic_ref_types = ["example_document"]
