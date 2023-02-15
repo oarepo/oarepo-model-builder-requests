@@ -14,16 +14,19 @@ def test_custom_type_request(
     users,
     request_record_input_data,
 ):
+    receiver_user = users[1]
+    sender_identity = identity_simple
+    receiver_identity = identity_simple_2
     request_types = app.extensions["invenio-requests"].request_type_registry
     for request_type in request_types:
         request = submit_request(
-            identity_simple,
+            sender_identity,
             data=request_record_input_data,
             topic=example_{{ current_model.record_prefix_snake }},
             request_type=request_type,
-            receiver=users[1],
+            receiver=receiver_user,
         )
-        # assert current_service.read(identity_simple, example_{{ current_model.record_prefix_snake }}["id"])["metadata"][
+        # assert current_service.read(sender_identity, example_{{ current_model.record_prefix_snake }}["id"])["metadata"][
         #           "status"] == "not approved"
         request_id = request.id
 
@@ -36,18 +39,18 @@ def test_custom_type_request(
         }
         # the sender can't approve the request
         with pytest.raises(PermissionDeniedError):
-            requests_service.execute_action(identity_simple, request_id, "accept", payload)
+            requests_service.execute_action(sender_identity, request_id, "accept", payload)
         # the reciever can
         approve_response = requests_service.execute_action(
-            identity_simple_2, request_id, "accept", payload
+            receiver_identity, request_id, "accept", payload
         )
-        # assert current_service.read(identity_simple, example_{{ current_model.record_prefix_snake }}["id"])["metadata"][
+        # assert current_service.read(sender_identity, example_{{ current_model.record_prefix_snake }}["id"])["metadata"][
         #           "status"] == "approved"
         request = approve_response._request
         RequestEvent.index.refresh()
 
         assert "accepted" == request.status
-        events = request_events_service.search(identity_simple, request_id)
+        events = request_events_service.search(sender_identity, request_id)
         assert 3 == events.total  # two comments and accept log
         hits = list(events.hits)
         assert CommentEventType.type_id == hits[0]["type"]

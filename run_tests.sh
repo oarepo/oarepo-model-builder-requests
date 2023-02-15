@@ -14,4 +14,5 @@ python3 -m venv $MODEL_VENV
 pip install -U setuptools pip wheel
 pip install "./tests/test_custom_classes"
 pip install "./tests/$MODEL[tests]"
+cp ./tests/test_custom_action.py ./tests/example_document/tests/requests/test_custom_action.py
 pytest tests/$MODEL/tests
