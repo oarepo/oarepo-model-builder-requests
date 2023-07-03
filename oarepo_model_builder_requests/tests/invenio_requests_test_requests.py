@@ -1,7 +1,9 @@
-from oarepo_model_builder_requests.invenio.invenio_requests_builder import InvenioRequestsPythonBuilder
+from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
 
 
-class InvenioRequestsTestRequestsBuilder(InvenioRequestsPythonBuilder):
+class InvenioRequestsTestRequestsBuilder(InvenioBaseClassPythonBuilder):
     TYPE = "invenio_requests_tests"
     template = "requests-tests"
-    MODULE = "tests.requests.test_requests"
+
+    def _get_output_module(self):
+        return "tests.requests.test_requests"

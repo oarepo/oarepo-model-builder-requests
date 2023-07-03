@@ -1,9 +1,7 @@
-from oarepo_model_builder_requests.invenio.invenio_requests_builder import InvenioRequestsPythonBuilder
+from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
 
 
-class InvenioRequestsConfigBuilder(InvenioRequestsPythonBuilder):
+class InvenioRequestsConfigBuilder(InvenioBaseClassPythonBuilder):
     TYPE = "invenio_requests_config"
+    section = "config"
     template = "requests-config"
-
-    def get_module(self):
-        return self.current_model.config_package

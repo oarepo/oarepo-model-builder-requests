@@ -1,11 +1,12 @@
-from oarepo_model_builder_requests.invenio.invenio_requests_builder import InvenioRequestsPythonBuilder
+from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
 
 
-class InvenioRequestsActionsBuilder(InvenioRequestsPythonBuilder):
+class InvenioRequestsActionsBuilder(InvenioBaseClassPythonBuilder):
     TYPE = "invenio_requests_actions"
+    section = "requests"
     template = "requests-actions"
+    skip_if_not_generating = False
 
-    def get_module(self):
-        return self.current_model.requests_actions
-
-
+    def _get_output_module(self):
+        module = self.current_model.definition["requests-modules"]["actions-module"]
+        return module

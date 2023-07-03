@@ -2,9 +2,7 @@ from flask_security.utils import hash_password
 from invenio_app.factory import create_api
 from invenio_records_resources.services.uow import UnitOfWork, RecordCommitOp
 from invenio_requests.customizations import CommentEventType, LogEventType
-from {{ current_model.record_class|package_name }} import {{ current_model.record_class|base_name }}
 from flask_principal import Identity, Need, UserNeed
-from {{ current_model.proxies_current_service|package_name }} import {{ current_model.proxies_current_service|base_name }}
 import pytest
 from invenio_requests.proxies import current_requests
 from invenio_requests.records.api import RequestEventFormat
@@ -12,6 +10,8 @@ from invenio_access.models import ActionRoles
 from invenio_access.permissions import superuser_access
 from invenio_accounts.models import Role
 
+{{ vars.record|generate_import }}
+from {{ vars.proxy.module }} import {{ vars.service.proxy }}
 
 @pytest.fixture(scope="module")
 def app_config(app_config):
@@ -122,10 +122,10 @@ def request_record_input_data():
     return ret
 
 @pytest.fixture(scope="function")
-def example_{{ current_model.record_prefix_snake }}(app, db, sample_metadata_list):
+def example_topic(app, db, sample_metadata_list):
     # return record
     with UnitOfWork(db.session) as uow:
-        record = {{ current_model.record_class|base_name }}.create(sample_metadata_list[0])
-        uow.register(RecordCommitOp(record, {{ current_model.proxies_current_service|base_name }}.indexer, True))
+        record = {{ vars.record.class|base_name }}.create(sample_metadata_list[0])
+        uow.register(RecordCommitOp(record, {{ vars.service.proxy }}.indexer, True))
         uow.commit()
         return record

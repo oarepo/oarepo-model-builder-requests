@@ -1,17 +1,18 @@
 from invenio_records_resources.proxies import current_service_registry
 from invenio_records_resources.services.uow import RecordCommitOp
 from invenio_requests.resolvers.registry import ResolverRegistry
-{% for request_data in requests.values() %}
-{% if request_data.approve_action_generate %}
-{% for approve_action_base in request_data.approve_action_bases %}
-from {{ approve_action_base|package_name }} import {{ approve_action_base|base_name }}
-{% endfor %}
+{% for request in vars.requests.values() %}
+{% for action in request.actions.values() %}
+{% if action.generate %}
+{{ action.imports|generate_import }}
 {% endif %}
 {% endfor %}
+{% endfor %}
 
-{% for request_data in requests.values() %}
-{% if request_data.approve_action_generate %}
-class {{ request_data.approve_action_class|base_name }}{% if request_data.approve_action_bases %}({% for approve_action_base in request_data.approve_action_bases%}{{ approve_action_base|base_name }}{{ ", " if not loop.last else "" }}{% endfor %}){% endif %}:
+{% for request in vars.requests.values() %}
+{% for action in request.actions.values() %}
+{% if action.generate %}
+class {{ action|class_header }}:
 
     def execute(self, identity, uow):
         topic = self.request.topic.resolve()
@@ -27,4 +28,5 @@ class {{ request_data.approve_action_class|base_name }}{% if request_data.approv
         uow.register(RecordCommitOp(topic, topic_service.indexer))
         super().execute(identity, uow)
 {% endif %}
+{% endfor %}
 {% endfor %}

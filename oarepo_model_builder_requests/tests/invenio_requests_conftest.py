@@ -1,8 +1,9 @@
-from oarepo_model_builder_requests.invenio.invenio_requests_builder import InvenioRequestsPythonBuilder
+from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
 
 
-class InvenioRequestsConftestBuilder(InvenioRequestsPythonBuilder):
+class InvenioRequestsConftestBuilder(InvenioBaseClassPythonBuilder):
     TYPE = "invenio_requests_conftest"
     template = "requests-conftest"
-    MODULE = "tests.requests.conftest"
 
+    def _get_output_module(self):
+        return "tests.requests.conftest"

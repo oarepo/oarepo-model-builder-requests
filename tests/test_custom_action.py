@@ -1,8 +1,8 @@
 from invenio_requests.records.api import RequestEventFormat
-
-from example_document.proxies import current_service
-from example_document.requests.types import CustomApproveActionRequestType
 from test_custom_classes.request_test_actions import ActuallyApproveRecordAction
+from thesis.proxies import current_service
+from thesis.records.requests.types import CustomApproveActionRequestType
+
 
 def test_action_changes_topic_status(
     app,
@@ -11,7 +11,7 @@ def test_action_changes_topic_status(
     submit_request,
     request_events_service,
     requests_service,
-    example_example_document,
+    example_topic,
     users,
     request_record_input_data,
 ):
@@ -26,12 +26,11 @@ def test_action_changes_topic_status(
         request = submit_request(
             sender_identity,
             data=request_record_input_data,
-            topic=example_example_document,
+            topic=example_topic,
             request_type=request_type,
             receiver=receiver_user,
         )
-        # assert current_service.read(identity_simple, example_example_document["id"])["metadata"][
-        #           "status"] == "not approved"
+
         request_id = request.id
 
         # approve request by receiver
@@ -45,5 +44,9 @@ def test_action_changes_topic_status(
         requests_service.execute_action(
             receiver_identity, request_id, "accept", payload
         )
-        assert current_service.read(sender_identity, example_example_document["id"])["metadata"][
-                  "status"] == "approved" # this part checks whether the topic status was approved
+        assert (
+            current_service.read(sender_identity, example_topic["id"])["metadata"][
+                "status"
+            ]
+            == "approved"
+        )  # this part checks whether the topic status was approved

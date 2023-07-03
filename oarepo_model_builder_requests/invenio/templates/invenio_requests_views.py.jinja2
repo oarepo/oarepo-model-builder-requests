@@ -1,8 +1,8 @@
-def init_addons_{{ current_model.extension_suffix }}_requests(state):
+def init_addons_{{ vars.module.suffix_snake }}_requests(state):
     app = state.app
     requests = app.extensions["invenio-requests"]
 
-    from {{ current_model.config_package|package_name }} import {{ current_model.config_package|base_name }} as config
+    {{ vars.config.module|generate_import(alias='config') }}
 
     for rt in getattr(config, "REQUESTS_REGISTERED_TYPES", []):
         requests.request_type_registry.register_type(rt)

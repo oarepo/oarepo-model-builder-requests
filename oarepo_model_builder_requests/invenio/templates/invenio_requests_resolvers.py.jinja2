@@ -1,6 +1,6 @@
-from invenio_records_resources.references import RecordResolver
+{{ vars.record_resolver.imports|generate_import }}
 
-class {{ current_model.requests_record_resolver_class|base_name }}(RecordResolver):
+class {{ vars.record_resolver|class_header }}:
     # invenio_requests.registry.TypeRegistry
     # requires name of the resolver for the model; needs only to be unique for the model, so use the name of the model
-    type_id = "{{ current_model.model_name }}"
+    type_id = "{{ vars.module.prefix_snake }}"

@@ -10,7 +10,7 @@ def test_custom_type_request(
     submit_request,
     request_events_service,
     requests_service,
-    example_{{ current_model.record_prefix_snake }},
+    example_topic,
     users,
     request_record_input_data,
 ):
@@ -19,16 +19,16 @@ def test_custom_type_request(
     receiver_identity = identity_simple_2
     request_types = app.extensions["invenio-requests"].request_type_registry
     for request_type in request_types:
-        if request_type.__module__ != "{{ current_model.requests_types }}":
+        if request_type.__module__ != "{{ vars.requests_modules.types_module }}": #not a generated request
             continue
         request = submit_request(
             sender_identity,
             data=request_record_input_data,
-            topic=example_{{ current_model.record_prefix_snake }},
+            topic=example_topic,
             request_type=request_type,
             receiver=receiver_user,
         )
-        # assert current_service.read(sender_identity, example_{{ current_model.record_prefix_snake }}["id"])["metadata"][
+        # assert current_service.read(sender_identity, example_topic["id"])["metadata"][
         #           "status"] == "not approved"
         request_id = request.id
 
@@ -46,7 +46,7 @@ def test_custom_type_request(
         approve_response = requests_service.execute_action(
             receiver_identity, request_id, "accept", payload
         )
-        # assert current_service.read(sender_identity, example_{{ current_model.record_prefix_snake }}["id"])["metadata"][
+        # assert current_service.read(sender_identity, example_topic["id"])["metadata"][
         #           "status"] == "approved"
         request = approve_response._request
         RequestEvent.index.refresh()
