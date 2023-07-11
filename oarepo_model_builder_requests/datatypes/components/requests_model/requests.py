@@ -28,13 +28,9 @@ class RecordResolverClassSchema(ma.Schema):
     imports = ma.fields.List(
         ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
     )
-    use_custom_proxy = ma.fields.Bool(
-        attribute="use-custom-proxy",
-        data_key="use-custom-proxy",
-    )
-    proxy_class = ma.fields.Str(
-        attribute="proxy-class",
-        data_key="proxy-class",
+    custom_proxy_class = ma.fields.Str(
+        attribute="custom-proxy-class",
+        data_key="custom-proxy-class",
     )
     skip = ma.fields.Boolean()
 
@@ -120,7 +116,7 @@ class RequestsComponent(DataTypeComponent):
 
         record_resolver.setdefault("generate", True)
         resolver_module = record_resolver.setdefault(
-            "module", f"{module}.{profile_module}.requests.resolver"
+            "module", f"{module}.{profile_module}.requests.resolvers"
         )
         record_resolver.setdefault(
             "class",
@@ -139,12 +135,9 @@ class RequestsComponent(DataTypeComponent):
             ],
         )
 
-        if context["profile"] == "record":
-            record_resolver.setdefault("use-custom-proxy", False)
-        elif context["profile"] == "draft":
-            record_resolver.setdefault("use-custom-proxy", True)
+        if context["profile"] == "draft":
             record_resolver.setdefault(
-                "proxy-class", "oarepo_runtime.resolvers.DraftProxy"
+                "custom-proxy-class", "oarepo_runtime.resolvers.DraftProxy"
             )
 
         for request_name, request_input_data in requests.items():
