@@ -4,3 +4,9 @@ class {{ vars.record_resolver|class_header }}:
     # invenio_requests.registry.TypeRegistry
     # requires name of the resolver for the model; needs only to be unique for the model, so use the name of the model
     type_id = "{{ vars.module.prefix_snake }}"
+    # drafts - change type_id, needs to be unique for each resolver, probably just create variable per request (name of the request by default)
+    proxy_cls = "proxy_class"
+    def __init__(
+        self, record_cls, service_id, type_key
+    ):
+        super().__init__(record_cls, service_id, type_key=type_key, proxy_cls=self.proxy_cls)

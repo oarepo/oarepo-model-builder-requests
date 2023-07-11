@@ -35,6 +35,7 @@ class RequestActionSchema(ma.Schema):
     class Meta:
         unknown = ma.RAISE
 
+    module = ma.fields.String(metadata={"doc": "Class module"})
     class_ = ma.fields.String(
         attribute="class",
         data_key="class",
@@ -56,6 +57,7 @@ class RequestTypeSchema(ma.Schema):
     class Meta:
         unknown = ma.RAISE
 
+    module = ma.fields.String(metadata={"doc": "Class module"})
     class_ = ma.fields.String(
         attribute="class",
         data_key="class",
@@ -76,6 +78,7 @@ class RequestTypeSchema(ma.Schema):
 
 
 class RequestSchema(ma.Schema):
+    module = ma.fields.String(metadata={"doc": "Class module"})
     type = ma.fields.Nested(RequestTypeSchema)
     actions = ma.fields.Dict(
         keys=ma.fields.Str(), values=ma.fields.Nested(RequestActionSchema)
