@@ -1,7 +1,9 @@
 from invenio_requests.records.api import RequestEventFormat
 from test_custom_classes.request_test_actions import ActuallyApproveRecordAction
 from thesis.proxies import current_service
-from thesis.records.requests.types import CustomApproveActionRequestType
+from thesis.records.requests.custom_approve_action_class_request.types import (
+    CustomApproveActionClassRequestRequestType,
+)
 
 
 def test_action_changes_topic_status(
@@ -20,7 +22,7 @@ def test_action_changes_topic_status(
     receiver_identity = identity_simple_2
     request_types = app.extensions["invenio-requests"].request_type_registry
     for request_type in request_types:
-        if not request_type == CustomApproveActionRequestType:
+        if not request_type == CustomApproveActionClassRequestRequestType:
             continue
         assert request_type.available_actions["accept"] == ActuallyApproveRecordAction
         request = submit_request(

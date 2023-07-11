@@ -1,17 +1,7 @@
 from invenio_records_resources.proxies import current_service_registry
 from invenio_records_resources.services.uow import RecordCommitOp
 from invenio_requests.resolvers.registry import ResolverRegistry
-{% for request in vars.requests.values() %}
-{% for action in request.actions.values() %}
-{% if action.generate %}
 {{ action.imports|generate_import }}
-{% endif %}
-{% endfor %}
-{% endfor %}
-
-{% for request in vars.requests.values() %}
-{% for action in request.actions.values() %}
-{% if action.generate %}
 class {{ action|class_header }}:
 
     def execute(self, identity, uow):
@@ -27,6 +17,3 @@ class {{ action|class_header }}:
             raise KeyError(f"topic {topic} service not found")
         uow.register(RecordCommitOp(topic, topic_service.indexer))
         super().execute(identity, uow)
-{% endif %}
-{% endfor %}
-{% endfor %}
