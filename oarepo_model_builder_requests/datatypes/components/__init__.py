@@ -1,7 +1,6 @@
-from oarepo_model_builder_requests.datatypes.components.requests_model import (
-    RequestsComponent,
-)
+from .requests_model import RecordResolverComponent, RequestsComponent
 
 requests_components = [
     RequestsComponent,
+    RecordResolverComponent,
 ]

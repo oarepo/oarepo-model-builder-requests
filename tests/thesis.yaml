@@ -13,49 +13,61 @@ record:
   permissions:
     presets: [ 'everyone' ]
   requests:
-    custom-type:
+    #assign-doi:
+    #  module: thesis.records.requests.assign_doi
+    #  type:
+    #    module: thesis.records.requests.assign_doi.types
+    #    class: thesis.records.requests.assign_doi.types.AssignDOIType
+    #    generate: True
+    #    base-classes: []
+    #    imports: []
+    #  actions:
+    #    approve:
+    #      module: thesis.records.requests.assign_doi.actions
+    #      class: thesis.records.requests.assign_doi.actions.AssignDOIApproveAction
+    #      generate: True
+    #      base-classes: []
+    #      imports: []
+    #assign-different-doi:
+    #  module: thesis.records.requests.assign_different_doi
+    #  type:
+    #    module: thesis.records.requests.assign_different_doi.types
+    #    class: thesis.records.requests.assign_different_doi.types.AssignDDOIType
+    #    generate: True
+    #    base-classes: [ ]
+    #    imports: [ ]
+    #  actions:
+    #    approve:
+    #      module: thesis.records.requests.assign_different_doi.actions
+    #      class: thesis.records.requests.assign_different_doi.actions.AssignDDOIApproveAction
+    #      generate: True
+    #      base-classes: [ ]
+    #      imports: [ ]
+    simple-request: {}
+    custom-type-class-request:
       type:
         class: test_custom_classes.request_test_types.MyTypeCustomClass
         generate: False
-    custom-type-base:
+    custom-type-base-class-request:
       type:
         base-classes:
           - MyTypeCustomClass
         imports:
           - import: test_custom_classes.request_test_types.MyTypeCustomClass
-    custom-approve-action:
+    custom-approve-action-class-request:
       actions:
         approve:
           class: test_custom_classes.request_test_actions.ActuallyApproveRecordAction
           generate: False
-    custom-approve-action-bases:
+    custom-approve-action-base-class-request:
       actions:
         approve:
           base-classes:
             - ActuallyApproveRecordAction
           imports:
             - import: test_custom_classes.request_test_actions.ActuallyApproveRecordAction
-    simple: {}
 
 settings:
   schema-server: 'local://'
-  
-#requests:
-#  custom-type:
-#    class: test_custom_classes.request_test_types.MyTypeCustomClass
-#    generate: False
-#  custom-type-base:
-#    bases:
-#      - test_custom_classes.request_test_types.MyTypeCustomClass
-#  custom-approve-action:
-#    actions:
-#      approve:
-#        class: test_custom_classes.request_test_actions.ActuallyApproveRecordAction
-#        generate: False
-#  custom-approve-action-bases:
-#    actions:
-#      approve:
-#        bases:
-#          - test_custom_classes.request_test_actions.ActuallyApproveRecordAction
-#  simple: {}
+
 

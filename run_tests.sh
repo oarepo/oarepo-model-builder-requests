@@ -25,6 +25,6 @@ python3 -m venv $MODEL_VENV
 pip install -U setuptools pip wheel
 pip install "./$BUILD_TEST_DIR/$MODEL[tests]"
 pip install "./$CODE_TEST_DIR/test_custom_classes"
-cp ./$CODE_TEST_DIR/test_custom_action.py ./$BUILD_TEST_DIR/$MODEL/tests/requests/test_custom_action.py
+cp -r ./$CODE_TEST_DIR/requests_tests ./$BUILD_TEST_DIR/$MODEL/tests/requests
 
 pytest $BUILD_TEST_DIR/$MODEL/tests

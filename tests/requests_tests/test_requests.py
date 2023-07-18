@@ -1,7 +1,8 @@
 import pytest
 from invenio_records_resources.services.errors import PermissionDeniedError
-from invenio_requests.records.api import RequestEvent, RequestEventFormat
 from invenio_requests.customizations.event_types import CommentEventType
+from invenio_requests.records.api import RequestEvent, RequestEventFormat
+
 
 def test_custom_type_request(
     app,
@@ -19,7 +20,9 @@ def test_custom_type_request(
     receiver_identity = identity_simple_2
     request_types = app.extensions["invenio-requests"].request_type_registry
     for request_type in request_types:
-        if request_type.__module__ != "thesis.records.requests.assign_doi.types": #not a generated request
+        if not request_type.__module__.startswith(
+            "thesis.records.requests."
+        ):  # not a generated request
             continue
         request = submit_request(
             sender_identity,
@@ -32,7 +35,7 @@ def test_custom_type_request(
         #           "status"] == "not approved"
         request_id = request.id
 
-    # approve request by receiver
+        # approve request by receiver
         payload = {
             "payload": {
                 "content": "Ok doc1 is good enough and therefore approved.",
@@ -41,7 +44,9 @@ def test_custom_type_request(
         }
         # the sender can't approve the request
         with pytest.raises(PermissionDeniedError):
-            requests_service.execute_action(sender_identity, request_id, "accept", payload)
+            requests_service.execute_action(
+                sender_identity, request_id, "accept", payload
+            )
         # the reciever can
         approve_response = requests_service.execute_action(
             receiver_identity, request_id, "accept", payload
@@ -56,7 +61,9 @@ def test_custom_type_request(
         assert 3 == events.total  # two comments and accept log
         hits = list(events.hits)
         assert CommentEventType.type_id == hits[0]["type"]
-        assert "Can you approve my document doc1 please?" == hits[0]["payload"]["content"]
+        assert (
+            "Can you approve my document doc1 please?" == hits[0]["payload"]["content"]
+        )
         assert (
             "Ok doc1 is good enough and therefore approved."
             == hits[2]["payload"]["content"]
