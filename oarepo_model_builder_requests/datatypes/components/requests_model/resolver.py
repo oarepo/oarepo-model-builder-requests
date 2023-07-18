@@ -80,7 +80,7 @@ class RecordResolverComponent(DataTypeComponent):
             ],
         )
 
-        if context["profile"] == "draft":
+        if context["profile"] in ("draft", "draft_files"):
             record_resolver.setdefault(
                 "custom-proxy-class", "oarepo_runtime.resolvers.DraftProxy"
             )

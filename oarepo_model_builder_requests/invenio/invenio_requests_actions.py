@@ -11,7 +11,7 @@ class InvenioRequestsActionsBuilder(InvenioBaseClassPythonBuilder):
     skip_if_not_generating = False
 
     def finish(self, **extra_kwargs):
-        super(InvenioBaseClassPythonBuilder, self).finish()
+        super(InvenioBaseClassPythonBuilder, self).finish() # calls super().finish() of InvenioBaseClassPythonBuilder
         if not self.generate:
             return
         vars = self.vars
