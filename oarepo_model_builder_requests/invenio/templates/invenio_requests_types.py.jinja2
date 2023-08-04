@@ -1,14 +1,18 @@
-{{ request.actions['approve'].class|generate_import }}
+{% for action_name, action in request.actions.items() %}
+{{ action.class|generate_import }}
+{% endfor %}
 {{ request.type.imports|generate_import }}
 
 class {{ request.type|class_header }}:
 
-    type_id = "{{ request_name }}"
+    type_id = "{{ request.type.id }}"
     name = "{{ request_name.capitalize() }}"
 
     available_actions = {
         {{ request.type.parent_actions }},
-        "accept": {{ request.actions['approve'].class|base_name }}
+        {% for action_name, action in request.actions.items() %}
+        "{{ action_name }}": {{ action.class|base_name }}
+        {% endfor %}
     }
 
     allowed_topic_ref_types = ["{{ vars.module.prefix_snake }}"] # On the Request record object, the topic is referenced by pid. This pid is

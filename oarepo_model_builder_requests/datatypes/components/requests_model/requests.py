@@ -50,6 +50,9 @@ class RequestTypeSchema(ma.Schema):
     imports = ma.fields.List(
         ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
     )
+    id_ = ma.fields.String(
+        attribute="id", data_key="id"
+    )
 
 
 class RequestSchema(ma.Schema):
@@ -103,6 +106,9 @@ class RequestsComponent(DataTypeComponent):
             request_type.setdefault(
                 "parent-actions",
                 f"**{request_type['base-classes'][0]}.available_actions",
+            )
+            request_type.setdefault(
+                "id", snake_case(request_name).replace("-","_")
             )
             # this needs to be updated if other types of actions are considered
             request_actions = request_input_data.setdefault("actions", {"approve": {}})

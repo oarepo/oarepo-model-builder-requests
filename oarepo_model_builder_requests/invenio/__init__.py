@@ -5,4 +5,5 @@ TEMPLATES = {
     "requests-ext": "templates/invenio_requests_ext.py.jinja2",
     "requests-config": "templates/invenio_requests_config.py.jinja2",
     "requests-views": "templates/invenio_requests_views.py.jinja2",
+    "requests-drafts-parent-field": "templates/invenio_requests_drafts_parent.py.jinja2"
 }
