@@ -13,4 +13,4 @@ class MyTypeCustomClass(RequestType):
         "accept": ActuallyApproveRecordAction,
     }
 
-    allowed_topic_ref_types = ["Thesis"]
+    allowed_topic_ref_types = ["thesis"]

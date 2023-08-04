@@ -10,6 +10,9 @@ class InvenioRequestsDraftsParentBuilder(InvenioBaseClassPythonBuilder):
     template = "requests-drafts-parent-field"
 
     def finish(self, **extra_kwargs):
+        if "draft-parent-record" not in self.current_model.definition:
+            return
+
         super(InvenioBaseClassPythonBuilder, self).finish() # calls super().finish() of InvenioBaseClassPythonBuilder
         vars = self.vars
         module = self.current_model.definition["draft-parent-record"]["module"]

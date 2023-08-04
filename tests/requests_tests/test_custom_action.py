@@ -5,6 +5,8 @@ from thesis.records.requests.custom_approve_action_class_request.types import (
     CustomApproveActionClassRequestRequestType,
 )
 
+from test_custom_classes.request_test_types import MyTypeCustomClass
+
 
 def test_action_changes_topic_status(
     app,
@@ -22,7 +24,7 @@ def test_action_changes_topic_status(
     receiver_identity = identity_simple_2
     request_types = app.extensions["invenio-requests"].request_type_registry
     for request_type in request_types:
-        if not request_type == CustomApproveActionClassRequestRequestType:
+        if not request_type == MyTypeCustomClass:
             continue
         assert request_type.available_actions["accept"] == ActuallyApproveRecordAction
         request = submit_request(
