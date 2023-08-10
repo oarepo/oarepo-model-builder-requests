@@ -19,7 +19,7 @@ def test_custom_type_request(
     receiver_identity = identity_simple_2
     request_types = app.extensions["invenio-requests"].request_type_registry
     for request_type in request_types:
-        if request_type.__module__ != "thesis.records.requests.assign_doi.tyexpes": #not a generated request
+        if request_type.__module__ != "thesis.records.requests.assign_doi.types": #not a generated request
             continue
         request = submit_request(
             sender_identity,

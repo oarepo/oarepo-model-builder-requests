@@ -14,6 +14,7 @@ env/
 venv/
 .venv/
 build/
+build-tests/
 develop-eggs/
 downloads/
 eggs/

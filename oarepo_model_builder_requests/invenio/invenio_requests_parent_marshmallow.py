@@ -4,10 +4,10 @@ from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuil
 from oarepo_model_builder.utils.python_name import module_to_path
 
 
-class InvenioRequestsDraftsParentBuilder(InvenioBaseClassPythonBuilder):
-    TYPE = "invenio_requests_types"
-    section = "requests"
-    template = "requests-drafts-parent-field"
+class InvenioRequestsParentMarshmallowBuilder(InvenioBaseClassPythonBuilder):
+    TYPE = "invenio_requests_parent_marshmallow"
+    section = "parent-record-marshmallow"
+    template = "requests-parent-marshmallow"
 
     def finish(self, **extra_kwargs):
         if "draft-parent-record" not in self.current_model.definition:
@@ -15,14 +15,15 @@ class InvenioRequestsDraftsParentBuilder(InvenioBaseClassPythonBuilder):
 
         super(InvenioBaseClassPythonBuilder, self).finish() # calls super().finish() of InvenioBaseClassPythonBuilder
         vars = self.vars
-        module = self.current_model.definition["draft-parent-record"]["module"]
+        module = self.current_model.definition["marshmallow"]["module"]
         python_path = Path(module_to_path(module) + ".py")
-        for request_name in vars["requests"]:
+        for request_name, request in vars["requests"].items():
             self.process_template(
                 python_path,
                 self.template,
                 current_module=module,
                 vars=vars,
                 request_name=request_name.replace("-", "_"),
+                request=request,
                 **extra_kwargs,
             )

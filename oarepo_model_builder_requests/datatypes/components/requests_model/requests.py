@@ -1,7 +1,7 @@
 import marshmallow as ma
 from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
-from oarepo_model_builder.datatypes.components import DefaultsModelComponent
-from oarepo_model_builder.datatypes.components.model.utils import set_default
+from oarepo_model_builder.datatypes.components import DefaultsModelComponent, MarshmallowModelComponent
+from oarepo_model_builder.datatypes.components.model.utils import set_default, append_array
 from oarepo_model_builder.utils.camelcase import camel_case, snake_case
 from oarepo_model_builder.validation.utils import ImportSchema
 
@@ -53,6 +53,33 @@ class RequestTypeSchema(ma.Schema):
     id_ = ma.fields.String(
         attribute="id", data_key="id"
     )
+class ParentMarshmallowSchema(ma.Schema):
+    module = ma.fields.String(metadata={"doc": "Class module"})
+    class_ = ma.fields.String(
+        attribute="class",
+        data_key="class",
+    )
+    generate = ma.fields.Bool()
+    base_classes = ma.fields.List(
+        ma.fields.Str(),
+        attribute="base-classes",
+        data_key="base-classes",
+        metadata={"doc": "base classes"},
+    )
+    imports = ma.fields.List(
+        ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
+    )
+
+class ParentMarshmallowRequestSchema(ma.Schema):
+    parent_field = ma.fields.String(data_key="parent-field", attribute="parent-field")
+    schema_class = ma.fields.String(data_key="schema-class", attribute="schema-class")
+    imports = ma.fields.List(
+        ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
+    )
+    module = ma.fields.String(metadata={"doc": "Class module"})
+    generate = ma.fields.Bool()
+
+
 
 
 class RequestSchema(ma.Schema):
@@ -61,11 +88,15 @@ class RequestSchema(ma.Schema):
     actions = ma.fields.Dict(
         keys=ma.fields.Str(), values=ma.fields.Nested(RequestActionSchema)
     )
+    parent_schema = ma.fields.Nested(ParentMarshmallowRequestSchema, data_key="parent-marshmallow", attribute="parent-marshmallow")
+
+
+
 
 
 class RequestsComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
-    depends_on = [DefaultsModelComponent]
+    depends_on = [DefaultsModelComponent, MarshmallowModelComponent]
 
     class ModelSchema(ma.Schema):
         requests = ma.fields.Dict(
@@ -110,7 +141,22 @@ class RequestsComponent(DataTypeComponent):
             request_type.setdefault(
                 "id", snake_case(request_name).replace("-","_")
             )
-            # this needs to be updated if other types of actions are considered
+
+            # parent schema
+            marshmallow = request_input_data.setdefault("parent-marshmallow", {})
+            marshmallow.setdefault("parent-field", snake_case(request_name).replace("-", "_"))
+            marshmallow.setdefault("schema-class", "invenio_requests.services.schemas.NoneReceiverGenericRequestSchema")
+            marshmallow.setdefault("module", datatype.definition["marshmallow"]["module"])
+            marshmallow.setdefault("generate", True)
+            append_array(datatype, "requests", request_name, "parent-marshmallow", "imports",
+                         {
+                             "import": "oarepo_requests.schemas.marshmallow.NoneReceiverGenericRequestSchema"
+                         }
+                         )
+
+
+
+            # todo this needs to be updated if other types of actions are considered
             request_actions = request_input_data.setdefault("actions", {"approve": {}})
             for action_name, action_input_data in request_actions.items():
                 request_action_module = action_input_data.setdefault(

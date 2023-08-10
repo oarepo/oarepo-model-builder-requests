@@ -1,9 +1,10 @@
 TEMPLATES = {
-    "requests-actions": "templates/invenio_requests_actions.py.jinja2",
-    "requests-resolvers": "templates/invenio_requests_resolvers.py.jinja2",
-    "requests-types": "templates/invenio_requests_types.py.jinja2",
-    "requests-ext": "templates/invenio_requests_ext.py.jinja2",
-    "requests-config": "templates/invenio_requests_config.py.jinja2",
-    "requests-views": "templates/invenio_requests_views.py.jinja2",
-    "requests-drafts-parent-field": "templates/invenio_requests_drafts_parent.py.jinja2"
+    "requests-actions": "templates/actions.py.jinja2",
+    "requests-resolvers": "templates/resolvers.py.jinja2",
+    "requests-types": "templates/types.py.jinja2",
+    "requests-config": "templates/config.py.jinja2",
+    "requests-views": "templates/views.py.jinja2",
+    "requests-parent-field": "templates/parent.py.jinja2",
+    "requests-parent-marshmallow": "templates/parent_marshmallow.py.jinja2",
+    "requests-parent-marshmallow-link": "templates/parent_marshmallow_link.py.jinja2"
 }
