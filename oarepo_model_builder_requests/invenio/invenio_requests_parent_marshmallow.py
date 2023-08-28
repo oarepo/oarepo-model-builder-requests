@@ -9,13 +9,16 @@ class InvenioRequestsParentMarshmallowBuilder(InvenioBaseClassPythonBuilder):
     section = "parent-record-marshmallow"
     template = "requests-parent-marshmallow"
 
+    def get_marshmallow_module(self):
+        return self.current_model.definition["marshmallow"]["module"]
+
     def finish(self, **extra_kwargs):
         if "draft-parent-record" not in self.current_model.definition:
             return
 
         super(InvenioBaseClassPythonBuilder, self).finish() # calls super().finish() of InvenioBaseClassPythonBuilder
         vars = self.vars
-        module = self.current_model.definition["marshmallow"]["module"]
+        module = self.get_marshmallow_module()
         python_path = Path(module_to_path(module) + ".py")
         for request_name, request in vars["requests"].items():
             self.process_template(

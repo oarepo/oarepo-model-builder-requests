@@ -1,4 +1,4 @@
 {{ vars.parent_record_marshmallow|generate_import }}
 
-class {{ vars.marshmallow|class_header }}:
+class {{ marshmallow|class_header }}:
     parent = ma.fields.Nested({{ vars.parent_record_marshmallow.class|base_name }})
