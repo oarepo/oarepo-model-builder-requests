@@ -1,5 +1,5 @@
-{{ request.parent_marshmallow.imports|generate_import }}
-{{ vars.parent_record_marshmallow.imports|generate_import }}
+{{ request.parent_marshmallow|generate_import }}
+{{ vars.parent_record_marshmallow|generate_import }}
 
 class {{ vars.parent_record_marshmallow|class_header }}:
    """"""

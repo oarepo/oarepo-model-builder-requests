@@ -1,4 +1,4 @@
-{{ vars.record_resolver.imports|generate_import }}
+{{ vars.record_resolver|generate_import }}
 {% if vars.record_resolver.custom_proxy_class %}
 {{ vars.record_resolver.custom_proxy_class|generate_import }}
 {% endif %}

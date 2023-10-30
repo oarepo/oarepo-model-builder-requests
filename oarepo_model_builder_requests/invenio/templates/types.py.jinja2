@@ -1,7 +1,7 @@
 {% for action_name, action in request.actions.items() %}
 {{ action.class|generate_import }}
 {% endfor %}
-{{ request.type.imports|generate_import }}
+{{ request.type|generate_import }}
 
 class {{ request.type|class_header }}:
 
@@ -9,7 +9,9 @@ class {{ request.type|class_header }}:
     name = "{{ request_name.capitalize() }}"
 
     available_actions = {
-        {{ request.type.parent_actions }},
+        {% for bc in request.type.base_classes %}
+        **{{ bc|base_name }}.available_actions,
+        {% endfor %}
         {% for action_name, action in request.actions.items() %}
         "{{ action_name }}": {{ action.class|base_name }}
         {% endfor %}
