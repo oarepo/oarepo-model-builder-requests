@@ -39,10 +39,4 @@ class ParentMarshmallowComponent(DataTypeComponent):
         m_module = marshmallow.setdefault("module", datatype.definition["marshmallow"]["module"])
         marshmallow.setdefault("class", f"{m_module}.GeneratedParentSchema")
         marshmallow.setdefault("generate", True)
-        marshmallow.setdefault("base-classes", ["InvenioParentSchema"])
-        append_array(datatype, "parent-record-marshmallow", "imports",
-                     {
-                         "import": "invenio_drafts_resources.services.records.schema.ParentSchema",
-                         "alias": "InvenioParentSchema"
-                     },
-                     )
+        marshmallow.setdefault("base-classes", ["invenio_drafts_resources.services.records.schema.ParentSchema{InvenioParentSchema}"])

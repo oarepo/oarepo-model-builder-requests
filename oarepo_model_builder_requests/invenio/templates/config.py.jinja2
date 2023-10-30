@@ -1,6 +1,6 @@
 from invenio_users_resources.resolvers import UserResolver
-{{ vars.record|generate_import }}
-{{ vars.record_resolver|generate_import }}
+{{ vars.record.class|generate_import }}
+{{ vars.record_resolver.class|generate_import }}
 {% for request_data in vars.requests.values() %}
 {{ request_data.type.class|generate_import }}
 {% endfor %}

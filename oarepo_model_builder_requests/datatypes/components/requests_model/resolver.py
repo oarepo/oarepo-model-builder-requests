@@ -69,16 +69,9 @@ class RecordResolverComponent(DataTypeComponent):
         )
         record_resolver.setdefault(
             "base-classes",
-            ["RecordResolver"],
+            ["invenio_records_resources.references.RecordResolver"],
         )
-        record_resolver.setdefault(
-            "imports",
-            [
-                {
-                    "import": "invenio_records_resources.references.RecordResolver",
-                },
-            ],
-        )
+        record_resolver.setdefault("imports", [])
 
         if context["profile"] in ("draft", "draft_files"):
             record_resolver.setdefault(

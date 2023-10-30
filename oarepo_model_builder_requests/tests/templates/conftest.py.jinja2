@@ -10,7 +10,7 @@ from invenio_access.models import ActionRoles
 from invenio_access.permissions import superuser_access
 from invenio_accounts.models import Role
 
-{{ vars.record|generate_import }}
+{{ vars.record.class|generate_import }}
 from {{ vars.proxy.module }} import {{ vars.service.proxy }}
 
 @pytest.fixture(scope="module")
