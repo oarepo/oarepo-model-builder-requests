@@ -135,12 +135,13 @@ class RequestsComponent(DataTypeComponent):
 
             # parent schema
             marshmallow = request_input_data.setdefault("parent-marshmallow", {})
+
             marshmallow.setdefault(
                 "parent-field", snake_case(request_name).replace("-", "_")
             )
             marshmallow.setdefault(
                 "schema-class",
-                "invenio_requests.services.schemas.NoneReceiverGenericRequestSchema",
+                "oarepo_requests.schemas.marshmallow.NoneReceiverGenericRequestSchema",
             )
             marshmallow.setdefault(
                 "module", datatype.definition["marshmallow"]["module"]
