@@ -140,7 +140,7 @@ class RequestsComponent(DataTypeComponent):
             )
             marshmallow.setdefault(
                 "schema-class",
-                "invenio_requests.services.schemas.NoneReceiverGenericRequestSchema",
+                "oarepo_requests.schemas.marshmallow.NoneReceiverGenericRequestSchema",
             )
             marshmallow.setdefault(
                 "module", datatype.definition["marshmallow"]["module"]
