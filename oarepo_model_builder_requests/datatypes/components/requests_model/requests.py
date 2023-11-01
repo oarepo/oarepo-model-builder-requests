@@ -135,6 +135,7 @@ class RequestsComponent(DataTypeComponent):
 
             # parent schema
             marshmallow = request_input_data.setdefault("parent-marshmallow", {})
+
             marshmallow.setdefault(
                 "parent-field", snake_case(request_name).replace("-", "_")
             )
