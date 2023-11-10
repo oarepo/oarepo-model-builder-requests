@@ -1,11 +1,7 @@
 from invenio_requests.records.api import RequestEventFormat
 from test_custom_classes.request_test_actions import ActuallyApproveRecordAction
-from thesis.proxies import current_service
-from thesis.records.requests.custom_approve_action_class_request.types import (
-    CustomApproveActionClassRequestRequestType,
-)
-
 from test_custom_classes.request_test_types import MyTypeCustomClass
+from thesis.proxies import current_service
 
 
 def test_action_changes_topic_status(

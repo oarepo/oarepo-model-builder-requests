@@ -1,4 +1,8 @@
-from .requests_model import RecordResolverComponent, RequestsComponent, ParentMarshmallowComponent
+from .requests_model import (
+    ParentMarshmallowComponent,
+    RecordResolverComponent,
+    RequestsComponent,
+)
 
 requests_components = [
     RequestsComponent,

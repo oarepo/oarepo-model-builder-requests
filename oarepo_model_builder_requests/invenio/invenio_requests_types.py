@@ -10,7 +10,9 @@ class InvenioRequestsTypesBuilder(InvenioBaseClassPythonBuilder):
     template = "requests-types"
 
     def finish(self, **extra_kwargs):
-        super(InvenioBaseClassPythonBuilder, self).finish() # calls super().finish() of InvenioBaseClassPythonBuilder
+        super(
+            InvenioBaseClassPythonBuilder, self
+        ).finish()  # calls super().finish() of InvenioBaseClassPythonBuilder
         vars = self.vars
 
         for request_name, request in vars["requests"].items():

@@ -16,7 +16,9 @@ class InvenioRequestsParentMarshmallowBuilder(InvenioBaseClassPythonBuilder):
         if "draft-parent-record" not in self.current_model.definition:
             return
 
-        super(InvenioBaseClassPythonBuilder, self).finish() # calls super().finish() of InvenioBaseClassPythonBuilder
+        super(
+            InvenioBaseClassPythonBuilder, self
+        ).finish()  # calls super().finish() of InvenioBaseClassPythonBuilder
         vars = self.vars
         module = self.get_marshmallow_module()
         python_path = Path(module_to_path(module) + ".py")

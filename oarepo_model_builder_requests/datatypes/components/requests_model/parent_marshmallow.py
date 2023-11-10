@@ -1,9 +1,11 @@
 import marshmallow as ma
 from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
-from oarepo_model_builder.datatypes.components.model.utils import set_default, append_array
+from oarepo_model_builder.datatypes.components import (
+    DefaultsModelComponent,
+    MarshmallowModelComponent,
+)
+from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.validation.utils import ImportSchema
-from oarepo_model_builder.datatypes.components import DefaultsModelComponent, MarshmallowModelComponent
-
 
 
 class ParentMarshmallowClassSchema(ma.Schema):
@@ -23,6 +25,7 @@ class ParentMarshmallowClassSchema(ma.Schema):
         ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
     )
 
+
 class ParentMarshmallowComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
     depends_on = [DefaultsModelComponent, MarshmallowModelComponent]
@@ -36,7 +39,14 @@ class ParentMarshmallowComponent(DataTypeComponent):
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         marshmallow = set_default(datatype, "parent-record-marshmallow", {})
-        m_module = marshmallow.setdefault("module", datatype.definition["marshmallow"]["module"])
+        m_module = marshmallow.setdefault(
+            "module", datatype.definition["marshmallow"]["module"]
+        )
         marshmallow.setdefault("class", f"{m_module}.GeneratedParentSchema")
         marshmallow.setdefault("generate", True)
-        marshmallow.setdefault("base-classes", ["invenio_drafts_resources.services.records.schema.ParentSchema{InvenioParentSchema}"])
+        marshmallow.setdefault(
+            "base-classes",
+            [
+                "invenio_drafts_resources.services.records.schema.ParentSchema{InvenioParentSchema}"
+            ],
+        )

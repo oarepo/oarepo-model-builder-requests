@@ -8,8 +8,11 @@ class InvenioRequestsParentMarshmallowLinkBuilder(InvenioBaseClassPythonBuilder)
 
     def _get_marshmallow(self):
         return self.current_model.definition["marshmallow"]
+
     def finish(self, **extra_kwargs):
         # for now the ma schema for parent is generated only when requests are present
-        if "draft-parent-record" not in self.current_model.definition or getattr(self.current_model.definition, "requests", None):
+        if "draft-parent-record" not in self.current_model.definition or getattr(
+            self.current_model.definition, "requests", None
+        ):
             return
         super().finish(marshmallow=self._get_marshmallow(), **extra_kwargs)
