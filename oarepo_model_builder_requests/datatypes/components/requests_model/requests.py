@@ -4,10 +4,7 @@ from oarepo_model_builder.datatypes.components import (
     DefaultsModelComponent,
     MarshmallowModelComponent,
 )
-from oarepo_model_builder.datatypes.components.model.utils import (
-    set_default,
-    append_array,
-)
+from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.utils.camelcase import camel_case, snake_case
 from oarepo_model_builder.validation.utils import ImportSchema
 
@@ -52,6 +49,17 @@ class RequestTypeSchema(ma.Schema):
     )
     imports = ma.fields.List(
         ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
+    )
+    allowed_receiver_ref_types = ma.fields.List(
+        ma.fields.String,
+        attribute="allowed-receiver-ref-types",
+        data_key="allowed-receiver-ref-types",
+    )
+    needs_context = ma.fields.Dict(
+        keys=ma.fields.String,
+        values=ma.fields.String,
+        attribute="needs-context",
+        data_key="needs-context",
     )
     id_ = ma.fields.String(attribute="id", data_key="id")
 
