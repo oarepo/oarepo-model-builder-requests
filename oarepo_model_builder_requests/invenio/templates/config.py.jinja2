@@ -1,6 +1,8 @@
 from invenio_users_resources.resolvers import UserResolver
 {{ vars.record.class|generate_import }}
+{% if not vars.record_resolver.skip %}
 {{ vars.record_resolver.class|generate_import }}
+{% endif %}
 {% for request_data in vars.requests.values() %}
 {{ request_data.type.class|generate_import }}
 {% endfor %}
