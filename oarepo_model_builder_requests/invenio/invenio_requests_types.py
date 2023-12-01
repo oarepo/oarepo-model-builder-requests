@@ -1,19 +1,19 @@
 from pathlib import Path
 
-from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
 from oarepo_model_builder.utils.python_name import module_to_path
 
+from .invenio_requests_builder_base import InvenioRequestsBuilder
 
-class InvenioRequestsTypesBuilder(InvenioBaseClassPythonBuilder):
+
+class InvenioRequestsTypesBuilder(InvenioRequestsBuilder):
     TYPE = "invenio_requests_types"
     section = "requests"
     template = "requests-types"
 
     def finish(self, **extra_kwargs):
-        super(
-            InvenioBaseClassPythonBuilder, self
-        ).finish()  # calls super().finish() of InvenioBaseClassPythonBuilder
-        vars = self.vars
+        vars = self.get_vars_or_none_if_no_requests()
+        if not vars:
+            return
 
         for request_name, request in vars["requests"].items():
             if not request["type"]["generate"]:
