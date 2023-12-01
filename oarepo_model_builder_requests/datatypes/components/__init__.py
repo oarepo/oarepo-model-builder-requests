@@ -1,11 +1,7 @@
-from .requests_model import (
-    ParentMarshmallowComponent,
-    RecordResolverComponent,
-    RequestsComponent,
-)
+from .requests_model import RecordResolverComponent, RequestsComponent, RequestsTestComponent
 
 requests_components = [
     RequestsComponent,
     RecordResolverComponent,
-    ParentMarshmallowComponent,
+    RequestsTestComponent,
 ]
