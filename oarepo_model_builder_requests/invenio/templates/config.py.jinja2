@@ -1,4 +1,5 @@
-from invenio_users_resources.resolvers import UserResolver
+from oarepo_runtime.records.entity_resolvers import UserResolver
+
 {{ vars.record.class|generate_import }}
 {% if not vars.record_resolver.skip %}
 {{ vars.record_resolver.class|generate_import }}
