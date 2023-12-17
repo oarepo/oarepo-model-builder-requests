@@ -9,8 +9,8 @@ from oarepo_runtime.records.entity_resolvers import UserResolver
 {% endfor %}
 
 
+REQUESTS_REGISTERED_TYPES = [{% for request_data in vars.requests.values() %}{{ request_data.type.class|base_name }}(), {% endfor %}]
 
-REQUESTS_REGISTERED_TYPES = [{% for request_data in vars.requests.values() %}{{ request_data.type.class|base_name }}, {% endfor %}]
 {% if not vars.record_resolver.skip %}
 REQUESTS_ENTITY_RESOLVERS = [
         UserResolver(),
