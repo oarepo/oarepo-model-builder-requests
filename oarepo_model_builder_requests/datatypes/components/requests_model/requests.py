@@ -149,7 +149,7 @@ class RequestsComponent(DataTypeComponent):
             )
             marshmallow.setdefault(
                 "schema-class",
-                "oarepo_requests.schemas.marshmallow.NoneReceiverGenericRequestSchema",
+                "oarepo_requests.services.schemas.NoneReceiverGenericRequestSchema",
             )
             marshmallow.setdefault(
                 "module", datatype.definition["marshmallow"]["module"]
