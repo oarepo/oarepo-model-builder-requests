@@ -69,11 +69,12 @@ class RecordResolverComponent(DataTypeComponent):
         )
         record_resolver.setdefault(
             "base-classes",
-            ["invenio_records_resources.references.RecordResolver"],
+            ["oarepo_runtime.records.entity_resolvers.RecordResolver"],
         )
         record_resolver.setdefault("imports", [])
 
         if context["profile"] in ("draft", "draft_files"):
             record_resolver.setdefault(
-                "custom-proxy-class", "oarepo_runtime.records.resolvers.DraftProxy"
+                "custom-proxy-class",
+                "oarepo_runtime.records.entity_resolvers.DraftProxy",
             )
