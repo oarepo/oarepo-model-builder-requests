@@ -55,12 +55,21 @@ class RequestTypeSchema(ma.Schema):
         attribute="allowed-receiver-ref-types",
         data_key="allowed-receiver-ref-types",
     )
+    allowed_receiver_topic_types = ma.fields.List(
+        ma.fields.String,
+        attribute="allowed-receiver-topic-types",
+        data_key="allowed-receiver-topic-types",
+    )
+    generate_on_parent = ma.fields.String(
+        attribute="generate-on-parent", data_key="generate-on-parent"
+    )
     needs_context = ma.fields.Dict(
         keys=ma.fields.String,
         values=ma.fields.String,
         attribute="needs-context",
         data_key="needs-context",
     )
+
     id_ = ma.fields.String(attribute="id", data_key="id")
 
 
@@ -137,9 +146,10 @@ class RequestsComponent(DataTypeComponent):
             )
             request_type.setdefault("generate", True)
             request_type.setdefault(
-                "base-classes", ["invenio_requests.customizations.RequestType"]
+                "base-classes", ["oarepo_requests.types.generic.OARepoRequestType"]
             )  # accept action
             request_type.setdefault("id", snake_case(request_name).replace("-", "_"))
+            request_type.setdefault("generate-on-parent", False)
 
             # parent schema
             marshmallow = request_input_data.setdefault("parent-marshmallow", {})
@@ -157,7 +167,7 @@ class RequestsComponent(DataTypeComponent):
             marshmallow.setdefault("generate", True)
 
             # todo this needs to be updated if other types of actions are considered
-            request_actions = request_input_data.setdefault("actions", {"approve": {}})
+            request_actions = request_input_data.setdefault("actions", {})
             for action_name, action_input_data in request_actions.items():
                 request_action_module = action_input_data.setdefault(
                     "module", f"{request_module}.actions"
