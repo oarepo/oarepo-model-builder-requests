@@ -21,7 +21,9 @@ class InvenioRequestsParentBuilder(InvenioRequestsBuilder):
             return
         module = self.current_model.definition["draft-parent-record"]["module"]
         python_path = Path(module_to_path(module) + ".py")
-        for request_name in vars["requests"]:
+        for request_name, request in vars["requests"].items():
+            if not request["type"]["generate-on-parent"]:
+                continue
             self.process_template(
                 python_path,
                 self.template,

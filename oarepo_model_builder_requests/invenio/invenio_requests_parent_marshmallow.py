@@ -25,6 +25,8 @@ class InvenioRequestsParentMarshmallowBuilder(InvenioRequestsBuilder):
         module = self.get_marshmallow_module()
         python_path = Path(module_to_path(module) + ".py")
         for request_name, request in vars["requests"].items():
+            if not request["type"]["generate-on-parent"]:
+                continue
             self.process_template(
                 python_path,
                 self.template,
