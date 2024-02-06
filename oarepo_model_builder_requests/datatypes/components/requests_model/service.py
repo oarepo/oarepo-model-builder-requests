@@ -20,4 +20,4 @@ class RequestsPatchServiceModelComponent(DataTypeComponent):
         if not self.user_value:
             config[
                 "result-item-class"
-            ] = "oarepo_requests.services.results.RequestsAwareRecordItem"
+            ] = "oarepo_requests.services.results.RequestsAwareResultItem"

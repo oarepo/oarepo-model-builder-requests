@@ -7,4 +7,5 @@ TEMPLATES = {
     "requests-parent-field": "templates/parent.py.jinja2",
     "requests-parent-marshmallow": "templates/parent_marshmallow.py.jinja2",
     "requests-parent-marshmallow-link": "templates/parent_marshmallow_link.py.jinja2",
+    "requests-ext-resource": "templates/requests_ext_resource.py.jinja2"
 }

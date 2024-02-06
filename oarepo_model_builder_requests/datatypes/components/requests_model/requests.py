@@ -1,13 +1,15 @@
 import marshmallow as ma
-from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
+from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType, Section
 from oarepo_model_builder.datatypes.components import (
     DefaultsModelComponent,
     MarshmallowModelComponent,
 )
 from oarepo_model_builder.datatypes.components.model.utils import set_default
+from oarepo_model_builder.datatypes.model import Link
 from oarepo_model_builder.utils.camelcase import camel_case, snake_case
+from oarepo_model_builder.utils.python_name import Import
 from oarepo_model_builder.validation.utils import ImportSchema
-
+from oarepo_model_builder.utils.links import url_prefix2link
 
 class RequestActionSchema(ma.Schema):
     class Meta:
@@ -125,6 +127,16 @@ class RequestsComponent(DataTypeComponent):
             attribute="requests",
             data_key="requests",
         )
+    def process_links(self, datatype, section: Section, **kwargs):
+        url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])
+        # TODO add link to url prefix of the record requests resource
+        if datatype.root.profile == "record":
+            section.config["links_item"] += [Link(
+                    name="requests",
+                    link_class="RecordLink",
+                    link_args=[f'"{{+api}}{url_prefix}{{id}}/requests"'],
+                    imports=[Import("invenio_records_resources.services.RecordLink")],
+                )]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         module = datatype.definition["module"]["qualified"]

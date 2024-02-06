@@ -4,6 +4,8 @@ from .requests_model import (
     RequestsMarshmallowModelComponent,
     RequestsPatchServiceModelComponent,
     RequestsTestComponent,
+    RequestsExtModelComponent,
+    RequestsUIMarshmallowModelComponent,
 )
 
 requests_components = [
@@ -12,4 +14,6 @@ requests_components = [
     RequestsTestComponent,
     RequestsMarshmallowModelComponent,
     RequestsPatchServiceModelComponent,
+    RequestsExtModelComponent,
+    RequestsUIMarshmallowModelComponent
 ]

@@ -12,6 +12,7 @@ record:
     qualified: thesis
   permissions:
     presets: [ 'everyone' ]
+  request: {}
   requests:
     #assign-doi:
     #  module: thesis.records.requests.assign_doi
@@ -66,7 +67,9 @@ record:
             - ActuallyApproveRecordAction
           imports:
             - import: test_custom_classes.request_test_actions.ActuallyApproveRecordAction
-
+profiles:
+- record
+- requests
 settings:
   schema-server: 'local://'
 
