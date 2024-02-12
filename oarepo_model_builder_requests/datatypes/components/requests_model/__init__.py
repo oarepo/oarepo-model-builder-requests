@@ -13,6 +13,8 @@ __all__ = [
     "RequestsPatchServiceModelComponent",
     "RequestsExtModelComponent",
     "RequestsUIMarshmallowModelComponent",
+    "UIRecordResolverComponent",
 ]
 
 from .ui_marshmallow import RequestsUIMarshmallowModelComponent
+from .ui_resolver import UIRecordResolverComponent
