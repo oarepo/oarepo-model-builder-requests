@@ -10,12 +10,12 @@ class RequestsUIMarshmallowModelComponent(UIMarshmallowModelComponent):
     dependency_remap = UIMarshmallowModelComponent
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        marshmallow: Dict = set_default(datatype, "ui", "marshmallow", {})
-        # TODO this is in builtin models
-        marshmallow["base-classes"] = ["oarepo_requests.services.ui_schema.RequestsUISchema"]
-        #marshmallow.setdefault(
-        #    "base-classes", ["oarepo_requests.services.ui_schema.RequestsUISchema"]
-        #)
         super().before_model_prepare(datatype, **kwargs)
+        marshmallow: Dict = set_default(datatype, "ui", "marshmallow", {})
+        # TODO this is in builtin models; what is the correct approach to override this?
+        append_ui_record_requests = True
+        if append_ui_record_requests:
+            marshmallow["base-classes"].append("oarepo_requests.services.ui_schema.UIRequestsSerializationMixin")
+
 
 
