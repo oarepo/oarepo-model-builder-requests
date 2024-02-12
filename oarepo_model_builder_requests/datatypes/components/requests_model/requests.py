@@ -160,7 +160,7 @@ class RequestsComponent(DataTypeComponent):
             request_type.setdefault(
                 "base-classes", ["oarepo_requests.types.generic.OARepoRequestType"]
             )  # accept action
-            request_type.setdefault("id", snake_case(request_name).replace("-", "_"))
+            request_type.setdefault("id", f"{datatype.definition['module']['prefix-snake']}_{snake_case(request_name).replace('-', '_')}")
             request_type.setdefault("generate-on-parent", False)
 
             # parent schema
