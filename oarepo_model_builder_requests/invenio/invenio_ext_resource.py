@@ -3,7 +3,7 @@ from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuil
 
 class InvenioRequestsExtResourceBuilder(InvenioBaseClassPythonBuilder):
     TYPE = "invenio_requests_ext_resource"
-    section = "ext-resource"
+    section = "ext"
     template = "requests-ext-resource"
 
     def finish(self, **extra_kwargs):
