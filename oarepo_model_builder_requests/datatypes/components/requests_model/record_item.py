@@ -1,4 +1,4 @@
-from oarepo_model_builder.datatypes import ModelDataType, DataTypeComponent
+from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
 from oarepo_model_builder.datatypes.components import RecordItemModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 

@@ -11,7 +11,10 @@ from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.datatypes.model import Link
 from oarepo_model_builder.utils.camelcase import camel_case, snake_case
 from oarepo_model_builder.utils.links import url_prefix2link
-from oarepo_model_builder.utils.python_name import Import, convert_config_to_qualified_name
+from oarepo_model_builder.utils.python_name import (
+    Import,
+    convert_config_to_qualified_name,
+)
 from oarepo_model_builder.validation.utils import ImportSchema
 
 
@@ -77,19 +80,24 @@ class RequestTypeSchema(ma.Schema):
     )
     id_ = ma.fields.String(attribute="id", data_key="id")
 
+
 class RequestsSchema(ma.Schema):
     types = ma.fields.Dict(
-            keys=ma.fields.Str(),
-            values=ma.fields.Nested(RequestTypeSchema),
-        )
-    api_blueprint = ma.fields.Nested(BlueprintSchema,
-            attribute="api-blueprint",
-            data_key="api-blueprint",
-            metadata={"doc": "API blueprint details"},)
-    app_blueprint = ma.fields.Nested(BlueprintSchema,
-            attribute="app-blueprint",
-            data_key="app-blueprint",
-            metadata={"doc": "API blueprint details"},)
+        keys=ma.fields.Str(),
+        values=ma.fields.Nested(RequestTypeSchema),
+    )
+    api_blueprint = ma.fields.Nested(
+        BlueprintSchema,
+        attribute="api-blueprint",
+        data_key="api-blueprint",
+        metadata={"doc": "API blueprint details"},
+    )
+    app_blueprint = ma.fields.Nested(
+        BlueprintSchema,
+        attribute="app-blueprint",
+        data_key="app-blueprint",
+        metadata={"doc": "API blueprint details"},
+    )
     service = ma.fields.Nested(
         ServiceClassSchema, metadata={"doc": "Requests service settings"}
     )
@@ -98,18 +106,18 @@ class RequestsSchema(ma.Schema):
     )
 
 
-
-
 class RequestsComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
     depends_on = [DefaultsModelComponent, MarshmallowModelComponent]
 
     class ModelSchema(ma.Schema):
         requests = ma.fields.Nested(RequestsSchema)
+
     def process_requests_ext_resource(self, datatype, section, **kwargs):
         cfg = section.config
         cfg["ext-service-name"] = "service_requests"
         cfg["ext-resource-name"] = "resource_requests"
+
     def process_links(self, datatype, section: Section, **kwargs):
         url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])
         # TODO add link to url prefix of the record requests resource
@@ -186,7 +194,7 @@ class RequestsComponent(DataTypeComponent):
         api.setdefault("imports", [])
         convert_config_to_qualified_name(api, name_field="function")
 
-        app = requests.setdefault( "app-blueprint", {})
+        app = requests.setdefault("app-blueprint", {})
         app.setdefault("generate", True)
         app.setdefault("alias", requests_alias)
         app.setdefault("extra_code", "")
@@ -202,7 +210,7 @@ class RequestsComponent(DataTypeComponent):
         convert_config_to_qualified_name(app, name_field="function")
 
         module_container = datatype.definition["module"]
-        resource = requests.setdefault( "resource", {})
+        resource = requests.setdefault("resource", {})
         resource.setdefault("generate", True)
         resource.setdefault(
             "config-key",

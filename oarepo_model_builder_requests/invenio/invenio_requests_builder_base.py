@@ -11,6 +11,10 @@ class InvenioRequestsBuilder(InvenioBaseClassPythonBuilder):
             InvenioBaseClassPythonBuilder, self
         ).finish()  # calls super().finish() of InvenioBaseClassPythonBuilder
         vars = self.vars
-        if "requests" not in vars or not vars["requests"] or "types" not in vars["requests"]:
+        if (
+            "requests" not in vars
+            or not vars["requests"]
+            or "types" not in vars["requests"]
+        ):
             return None
         return vars

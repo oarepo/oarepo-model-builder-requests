@@ -5,6 +5,7 @@ from oarepo_model_builder.utils.dict import dict_get
 
 class OverridingBuilder(InvenioBaseClassPythonBuilder):
     overriden_sections = {}
+
     @property
     def generate(self):
         if hasattr(self, "section") and dict_get(
@@ -16,15 +17,20 @@ class OverridingBuilder(InvenioBaseClassPythonBuilder):
             self.skip_if_not_generating
             and hasattr(self, "section")
             and not dict_get(
-                self.current_model.definition, [*self.section.split("."), "generate"], False
+                self.current_model.definition,
+                [*self.section.split("."), "generate"],
+                False,
             )
         ):
             return False
         return True
 
     def _get_output_module(self):
-        module = dict_get(self.current_model.definition, [*self.section.split("."), "module"])
+        module = dict_get(
+            self.current_model.definition, [*self.section.split("."), "module"]
+        )
         return module
+
     @property
     def vars(self):
         vars = super().vars

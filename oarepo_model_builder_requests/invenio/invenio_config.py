@@ -5,4 +5,7 @@ class InvenioConfigBuilder(OverridingBuilder):
     TYPE = "invenio_requests_config"
     section = "config"
     template = "config"
-    overriden_sections = {"resource": "requests.resource", "service": "requests.service"}
+    overriden_sections = {
+        "resource": "requests.resource",
+        "service": "requests.service",
+    }
