@@ -15,10 +15,10 @@ class InvenioRequestsTypesBuilder(InvenioRequestsBuilder):
         if not vars:
             return
 
-        for request_name, request in vars["requests"].items():
-            if not request["type"]["generate"]:
+        for request_name, request in vars["requests"]["types"].items():
+            if not request["generate"]:
                 continue
-            module = request["type"]["module"]
+            module = request["module"]
             python_path = Path(module_to_path(module) + ".py")
 
             self.process_template(

@@ -1,15 +1,18 @@
-from oarepo_runtime.records.entity_resolvers import UserResolver
-
 {{ vars.record.class|generate_import }}
 {% if not vars.record_resolver.skip %}
+from oarepo_runtime.records.entity_resolvers import UserResolver
 {{ vars.record_resolver.class|generate_import }}
 {% endif %}
-{% for request_data in vars.requests.values() %}
-{{ request_data.type.class|generate_import }}
+{% if not vars.ui_record_resolver.skip %}
+from oarepo_requests.resolvers.ui import user_entity_reference_ui_resolver
+{{ vars.ui_record_resolver.function|generate_import }}
+{% endif %}
+{% for request_data in vars.requests.types.values() %}
+{{ request_data.class|generate_import }}
 {% endfor %}
 
 
-REQUESTS_REGISTERED_TYPES = [{% for request_data in vars.requests.values() %}{{ request_data.type.class|base_name }}(), {% endfor %}]
+REQUESTS_REGISTERED_TYPES = [{% for request_data in vars.requests.types.values() %}{{ request_data.class|base_name }}(), {% endfor %}]
 
 {% if not vars.record_resolver.skip %}
 REQUESTS_ENTITY_RESOLVERS = [
@@ -17,3 +20,10 @@ REQUESTS_ENTITY_RESOLVERS = [
         {{ vars.record_resolver.class|base_name }}(record_cls={{ vars.record.class|base_name }}, service_id="{{ vars.service_config.service_id }}", type_key="{{ vars.module.prefix_snake }}")
     ]
 {% endif %}
+{% if not vars.ui_record_resolver.skip %}
+ENTITY_REFERENCE_UI_RESOLVERS = {
+        "user": user_entity_reference_ui_resolver,
+        "{{ vars.module.prefix_snake }}": {{ vars.ui_record_resolver.function|base_name }},
+    }
+{% endif %}
+
