@@ -44,9 +44,10 @@ class UIRecordResolverComponent(DataTypeComponent):
 
         ui_record_resolver = set_default(datatype, "ui-record-resolver", {})
 
-        if not datatype.definition[
-            "requests"
-        ] or profile not in {"record", "draft"}:  # resolver is now used only in requests, therefore do not generate if requests are not present
+        if not datatype.definition["requests"] or profile not in {
+            "record",
+            "draft",
+        }:  # resolver is now used only in requests, therefore do not generate if requests are not present
             ui_record_resolver.setdefault("generate", False)
             ui_record_resolver.setdefault("skip", True)
             return

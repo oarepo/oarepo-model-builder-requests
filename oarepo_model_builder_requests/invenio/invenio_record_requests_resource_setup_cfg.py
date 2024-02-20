@@ -1,11 +1,15 @@
-from oarepo_model_builder.invenio.invenio_ext_setup_cfg import InvenioExtSetupCfgBuilder
-from oarepo_model_builder.invenio.invenio_record_resource_setup_cfg import InvenioRecordResourceSetupCfgBuilder
+from oarepo_model_builder.invenio.invenio_record_resource_setup_cfg import (
+    InvenioRecordResourceSetupCfgBuilder,
+)
 from oarepo_model_builder.outputs.cfg import CFGOutput
 from oarepo_model_builder.utils.python_name import split_package_base_name
 
 
-class InvenioRecordRequestsResourceSetupCfgBuilder(InvenioRecordResourceSetupCfgBuilder):
+class InvenioRecordRequestsResourceSetupCfgBuilder(
+    InvenioRecordResourceSetupCfgBuilder
+):
     TYPE = "invenio_record_requests_resource_setup_cfg"
+
     def finish(self):
         super().finish()
         section = getattr(

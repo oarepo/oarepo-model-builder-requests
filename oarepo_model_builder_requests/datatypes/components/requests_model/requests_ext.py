@@ -1,10 +1,10 @@
+from copy import deepcopy
+
+import marshmallow as ma
 from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
 from oarepo_model_builder.datatypes.components import DefaultsModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.utils.python_name import convert_config_to_qualified_name
-from copy import deepcopy
-
-import marshmallow as ma
 from oarepo_model_builder.validation.utils import ImportSchema
 
 
@@ -25,6 +25,7 @@ class RequestsExtSchema(ma.Schema):
 
     class Meta:
         unknown = ma.RAISE
+
 
 class RequestsExtModelComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
@@ -48,10 +49,13 @@ class RequestsExtModelComponent(DataTypeComponent):
         cfg["resource-config"]["skip"] = True
         cfg["service-config"]["skip"] = True
 
-    def process_mb_invenio_record_requests_resource_setup_cfg(self, datatype, section, **kwargs):
+    def process_mb_invenio_record_requests_resource_setup_cfg(
+        self, datatype, section, **kwargs
+    ):
         cfg = section.config
         cfg["api-blueprint"] = datatype.definition["api-requests-blueprint"]
         cfg["app-blueprint"] = datatype.definition["app-requests-blueprint"]
+
     def process_mb_invenio_requests_api_views(self, datatype, section, **kwargs):
         cfg = section.config
         cfg["api-blueprint"] = datatype.definition["api-requests-blueprint"]
@@ -75,7 +79,9 @@ class RequestsExtModelComponent(DataTypeComponent):
     def before_model_prepare(self, datatype, *, context, **kwargs):
         requests_module = "requests"
 
-        record_requests_config_cls = "oarepo_requests.resources.draft.config.DraftRecordRequestsResourceConfig"
+        record_requests_config_cls = (
+            "oarepo_requests.resources.draft.config.DraftRecordRequestsResourceConfig"
+        )
 
         alias = datatype.definition["module"]["alias"]
         requests_alias = f"{alias}_requests"
@@ -84,7 +90,7 @@ class RequestsExtModelComponent(DataTypeComponent):
         api = set_default(datatype, "api-requests-blueprint", {})
         api.setdefault("generate", True)
         api.setdefault("alias", requests_alias)
-        #api.setdefault("extra_code", "")
+        # api.setdefault("extra_code", "")
         api_module = api.setdefault(
             "module",
             f"{module}.views.{requests_module}.api",
@@ -111,7 +117,6 @@ class RequestsExtModelComponent(DataTypeComponent):
         app.setdefault("imports", [])
         convert_config_to_qualified_name(app, name_field="function")
 
-
         module_container = datatype.definition["module"]
         resource = set_default(datatype, "requests-record-resource", {})
         resource.setdefault("generate", True)
@@ -128,7 +133,7 @@ class RequestsExtModelComponent(DataTypeComponent):
             "additional-args",
             [
                 "record_requests_config={{" + record_requests_config_cls + "}}()",
-            ]
+            ],
         )
         resource.setdefault("skip", False)
 
@@ -139,11 +144,14 @@ class RequestsExtModelComponent(DataTypeComponent):
             "config-key",
             f"{module_container['base-upper']}_{requests_module.upper()}_SERVICE_CLASS",
         )
-        service.setdefault("class", f"oarepo_requests.services.draft.service.DraftRecordRequestsService")
+        service.setdefault(
+            "class",
+            f"oarepo_requests.services.draft.service.DraftRecordRequestsService",
+        )
         service.setdefault(
             "additional-args",
             [
                 f"record_service=self.service_records",
-            ]
+            ],
         )
         service.setdefault("skip", False)
