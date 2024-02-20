@@ -13,29 +13,28 @@ record:
   permissions:
     presets: [ 'everyone' ]
   requests:
-    simple-request: {}
-    custom-type-class-request:
-      type:
+    types:
+      simple-request: {}
+      custom-type-class-request:
         class: test_custom_classes.request_test_types.MyTypeCustomClass
         generate: False
-    custom-type-base-class-request:
-      type:
+      custom-type-base-class-request:
         base-classes:
           - MyTypeCustomClass
         imports:
           - import: test_custom_classes.request_test_types.MyTypeCustomClass
-    custom-approve-action-class-request:
-      actions:
-        approve:
-          class: test_custom_classes.request_test_actions.ActuallyApproveRecordAction
-          generate: False
-    custom-approve-action-base-class-request:
-      actions:
-        approve:
-          base-classes:
-            - ActuallyApproveRecordAction
-          imports:
-            - import: test_custom_classes.request_test_actions.ActuallyApproveRecordAction
+      custom-approve-action-class-request:
+        actions:
+          approve:
+            class: test_custom_classes.request_test_actions.ActuallyApproveRecordAction
+            generate: False
+      custom-approve-action-base-class-request:
+        actions:
+          approve:
+            base-classes:
+              - ActuallyApproveRecordAction
+            imports:
+              - import: test_custom_classes.request_test_actions.ActuallyApproveRecordAction
 profiles:
 - record
 settings:

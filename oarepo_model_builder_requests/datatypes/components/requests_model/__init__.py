@@ -1,7 +1,6 @@
 from .marshmallow import RequestsMarshmallowModelComponent
 from .record_item import RequestsRecordItemModelComponent
 from .requests import RequestsComponent
-from .requests_ext import RequestsExtModelComponent
 from .resolver import RecordResolverComponent
 from .tests import RequestsTestComponent
 
@@ -10,7 +9,6 @@ __all__ = [
     "RequestsComponent",
     "RecordResolverComponent",
     "RequestsMarshmallowModelComponent",
-    "RequestsExtModelComponent",
     "RequestsUIMarshmallowModelComponent",
     "UIRecordResolverComponent",
     "RequestsRecordItemModelComponent",

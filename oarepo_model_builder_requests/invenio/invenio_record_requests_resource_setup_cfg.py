@@ -12,28 +12,25 @@ class InvenioRecordRequestsResourceSetupCfgBuilder(
 
     def finish(self):
         super().finish()
-        section = getattr(
-            self.current_model,
-            f"section_mb_{self.TYPE.replace('-', '_')}",
-        )
+        definition = self.current_model.definition["requests"]
         output: CFGOutput = self.builder.get_output("cfg", "setup.cfg")
 
         register_function = split_package_base_name(
-            section.config["api-blueprint"]["function"]
+            definition["api-blueprint"]["function"]
         )
 
         output.add_entry_point(
             "invenio_base.api_blueprints",
-            section.config["api-blueprint"]["alias"],
+            definition["api-blueprint"]["alias"],
             f"{register_function[0]}:{register_function[-1]}",
         )
 
         register_function = split_package_base_name(
-            section.config["api-blueprint"]["function"]
+            definition["api-blueprint"]["function"]
         )
 
         output.add_entry_point(
             "invenio_base.blueprints",
-            section.config["api-blueprint"]["alias"],
+            definition["api-blueprint"]["alias"],
             f"{register_function[0]}:{register_function[-1]}",
         )

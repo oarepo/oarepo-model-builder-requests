@@ -16,7 +16,7 @@ class InvenioRequestsActionsBuilder(InvenioRequestsBuilder):
         if not vars:
             return
 
-        for request in vars["requests"].values():
+        for request in vars["requests"]["types"].values():
             for action in request["actions"].values():
                 if not action["generate"]:
                     continue

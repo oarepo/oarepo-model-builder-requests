@@ -1,7 +1,6 @@
 from .requests_model import (
     RecordResolverComponent,
     RequestsComponent,
-    RequestsExtModelComponent,
     RequestsMarshmallowModelComponent,
     RequestsRecordItemModelComponent,
     RequestsTestComponent,
@@ -14,7 +13,6 @@ requests_components = [
     RecordResolverComponent,
     RequestsTestComponent,
     RequestsMarshmallowModelComponent,
-    RequestsExtModelComponent,
     RequestsUIMarshmallowModelComponent,
     UIRecordResolverComponent,
     RequestsRecordItemModelComponent,

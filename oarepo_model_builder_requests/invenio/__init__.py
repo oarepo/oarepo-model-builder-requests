@@ -4,8 +4,5 @@ TEMPLATES = {
     "requests-types": "templates/types.py.jinja2",
     "requests-config": "templates/config.py.jinja2",
     "requests-views": "templates/views.py.jinja2",
-    "requests-parent-field": "templates/parent.py.jinja2",
-    "requests-parent-marshmallow": "templates/parent_marshmallow.py.jinja2",
-    "requests-parent-marshmallow-link": "templates/parent_marshmallow_link.py.jinja2",
     "requests-ext-resource": "templates/requests_ext_resource.py.jinja2",
 }

@@ -4,11 +4,14 @@ from oarepo_model_builder.datatypes.components import (
     DefaultsModelComponent,
     MarshmallowModelComponent,
 )
+from oarepo_model_builder.datatypes.components.model.blueprints import BlueprintSchema
+from oarepo_model_builder.datatypes.components.model.resource import ResourceClassSchema
+from oarepo_model_builder.datatypes.components.model.service import ServiceClassSchema
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.datatypes.model import Link
 from oarepo_model_builder.utils.camelcase import camel_case, snake_case
 from oarepo_model_builder.utils.links import url_prefix2link
-from oarepo_model_builder.utils.python_name import Import
+from oarepo_model_builder.utils.python_name import Import, convert_config_to_qualified_name
 from oarepo_model_builder.validation.utils import ImportSchema
 
 
@@ -63,58 +66,38 @@ class RequestTypeSchema(ma.Schema):
         attribute="allowed-receiver-topic-types",
         data_key="allowed-receiver-topic-types",
     )
-    generate_on_parent = ma.fields.String(
-        attribute="generate-on-parent", data_key="generate-on-parent"
-    )
     needs_context = ma.fields.Dict(
         keys=ma.fields.String,
         values=ma.fields.String,
         attribute="needs-context",
         data_key="needs-context",
     )
-
-    id_ = ma.fields.String(attribute="id", data_key="id")
-
-
-class ParentMarshmallowSchema(ma.Schema):
-    module = ma.fields.String(metadata={"doc": "Class module"})
-    class_ = ma.fields.String(
-        attribute="class",
-        data_key="class",
-    )
-    generate = ma.fields.Bool()
-    base_classes = ma.fields.List(
-        ma.fields.Str(),
-        attribute="base-classes",
-        data_key="base-classes",
-        metadata={"doc": "base classes"},
-    )
-    imports = ma.fields.List(
-        ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
-    )
-
-
-class ParentMarshmallowRequestSchema(ma.Schema):
-    parent_field = ma.fields.String(data_key="parent-field", attribute="parent-field")
-    schema_class = ma.fields.String(data_key="schema-class", attribute="schema-class")
-    imports = ma.fields.List(
-        ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
-    )
-    module = ma.fields.String(metadata={"doc": "Class module"})
-    generate = ma.fields.Bool()
-
-
-class RequestSchema(ma.Schema):
-    module = ma.fields.String(metadata={"doc": "Class module"})
-    type = ma.fields.Nested(RequestTypeSchema)
     actions = ma.fields.Dict(
         keys=ma.fields.Str(), values=ma.fields.Nested(RequestActionSchema)
     )
-    parent_schema = ma.fields.Nested(
-        ParentMarshmallowRequestSchema,
-        data_key="parent-marshmallow",
-        attribute="parent-marshmallow",
+    id_ = ma.fields.String(attribute="id", data_key="id")
+
+class RequestsSchema(ma.Schema):
+    types = ma.fields.Dict(
+            keys=ma.fields.Str(),
+            values=ma.fields.Nested(RequestTypeSchema),
+        )
+    api_blueprint = ma.fields.Nested(BlueprintSchema,
+            attribute="api-blueprint",
+            data_key="api-blueprint",
+            metadata={"doc": "API blueprint details"},)
+    app_blueprint = ma.fields.Nested(BlueprintSchema,
+            attribute="app-blueprint",
+            data_key="app-blueprint",
+            metadata={"doc": "API blueprint details"},)
+    service = ma.fields.Nested(
+        ServiceClassSchema, metadata={"doc": "Requests service settings"}
     )
+    resource = ma.fields.Nested(
+        ResourceClassSchema, metadata={"doc": "Requests resource settings"}
+    )
+
+
 
 
 class RequestsComponent(DataTypeComponent):
@@ -122,13 +105,11 @@ class RequestsComponent(DataTypeComponent):
     depends_on = [DefaultsModelComponent, MarshmallowModelComponent]
 
     class ModelSchema(ma.Schema):
-        requests = ma.fields.Dict(
-            keys=ma.fields.Str(),
-            values=ma.fields.Nested(RequestSchema),
-            attribute="requests",
-            data_key="requests",
-        )
-
+        requests = ma.fields.Nested(RequestsSchema)
+    def process_requests_ext_resource(self, datatype, section, **kwargs):
+        cfg = section.config
+        cfg["ext-service-name"] = "service_requests"
+        cfg["ext-resource-name"] = "resource_requests"
     def process_links(self, datatype, section: Section, **kwargs):
         url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])
         # TODO add link to url prefix of the record requests resource
@@ -147,46 +128,26 @@ class RequestsComponent(DataTypeComponent):
         profile_module = context["profile_module"]
 
         requests = set_default(datatype, "requests", {})
+        request_types = requests.setdefault("types", {})
 
-        for request_name, request_input_data in requests.items():
+        for request_name, request_type_data in request_types.items():
             request_module = f"{module}.{profile_module}.requests.{snake_case(request_name).replace('-', '_')}"
-
-            # type
-            request_type = request_input_data.setdefault("type", {})
-            request_type_module = request_type.setdefault(
+            request_type_module = request_type_data.setdefault(
                 "module", f"{request_module}.types"
             )
-            request_type.setdefault(
+            request_type_data.setdefault(
                 "class",
                 f"{request_type_module}.{camel_case(request_name)}RequestType",
             )
-            request_type.setdefault("generate", True)
-            request_type.setdefault(
+            request_type_data.setdefault("generate", True)
+            request_type_data.setdefault(
                 "base-classes", ["oarepo_requests.types.generic.OARepoRequestType"]
             )  # accept action
-            request_type.setdefault(
+            request_type_data.setdefault(
                 "id",
                 f"{datatype.definition['module']['prefix-snake']}_{snake_case(request_name).replace('-', '_')}",
             )
-            request_type.setdefault("generate-on-parent", False)
-
-            # parent schema
-            marshmallow = request_input_data.setdefault("parent-marshmallow", {})
-
-            marshmallow.setdefault(
-                "parent-field", snake_case(request_name).replace("-", "_")
-            )
-            marshmallow.setdefault(
-                "schema-class",
-                "oarepo_requests.services.schemas.NoneReceiverGenericRequestSchema",
-            )
-            marshmallow.setdefault(
-                "module", datatype.definition["marshmallow"]["module"]
-            )
-            marshmallow.setdefault("generate", True)
-
-            # todo this needs to be updated if other types of actions are considered
-            request_actions = request_input_data.setdefault("actions", {})
+            request_actions = request_type_data.setdefault("actions", {})
             for action_name, action_input_data in request_actions.items():
                 request_action_module = action_input_data.setdefault(
                     "module", f"{request_module}.actions"
@@ -200,3 +161,81 @@ class RequestsComponent(DataTypeComponent):
                     "base-classes", ["invenio_requests.customizations.AcceptAction"]
                 )  # accept action
                 action_input_data.setdefault("imports", [])
+
+        requests_module = "requests"
+        record_requests_config_cls = (
+            "oarepo_requests.resources.draft.config.DraftRecordRequestsResourceConfig"
+        )
+
+        alias = datatype.definition["module"]["alias"]
+        requests_alias = f"{alias}_requests"
+        module = datatype.definition["module"]["qualified"]
+
+        api = requests.setdefault("api-blueprint", {})
+        api.setdefault("generate", True)
+        api.setdefault("alias", requests_alias)
+        # api.setdefault("extra_code", "")
+        api_module = api.setdefault(
+            "module",
+            f"{module}.views.{requests_module}.api",
+        )
+        api.setdefault(
+            "function",
+            f"{api_module}.create_api_blueprint",
+        )
+        api.setdefault("imports", [])
+        convert_config_to_qualified_name(api, name_field="function")
+
+        app = requests.setdefault( "app-blueprint", {})
+        app.setdefault("generate", True)
+        app.setdefault("alias", requests_alias)
+        app.setdefault("extra_code", "")
+        ui_module = app.setdefault(
+            "module",
+            f"{module}.views.{requests_module}.app",
+        )
+        app.setdefault(
+            "function",
+            f"{ui_module}.create_app_blueprint",
+        )
+        app.setdefault("imports", [])
+        convert_config_to_qualified_name(app, name_field="function")
+
+        module_container = datatype.definition["module"]
+        resource = requests.setdefault( "resource", {})
+        resource.setdefault("generate", True)
+        resource.setdefault(
+            "config-key",
+            f"{module_container['base-upper']}_{requests_module.upper()}_RESOURCE_CLASS",
+        )
+        resource.setdefault(
+            "class",
+            f"oarepo_requests.resources.draft.resource.DraftRecordRequestsResource",
+        )
+
+        resource.setdefault(
+            "additional-args",
+            [
+                "record_requests_config={{" + record_requests_config_cls + "}}()",
+            ],
+        )
+        resource.setdefault("skip", False)
+
+        service = requests.setdefault("service", {})
+
+        service.setdefault("generate", True)
+        service.setdefault(
+            "config-key",
+            f"{module_container['base-upper']}_{requests_module.upper()}_SERVICE_CLASS",
+        )
+        service.setdefault(
+            "class",
+            f"oarepo_requests.services.draft.service.DraftRecordRequestsService",
+        )
+        service.setdefault(
+            "additional-args",
+            [
+                f"record_service=self.service_records",
+            ],
+        )
+        service.setdefault("skip", False)

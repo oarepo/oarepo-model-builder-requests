@@ -7,12 +7,12 @@ from oarepo_runtime.records.entity_resolvers import UserResolver
 from oarepo_requests.resolvers.ui import user_entity_reference_ui_resolver
 {{ vars.ui_record_resolver.function|generate_import }}
 {% endif %}
-{% for request_data in vars.requests.values() %}
-{{ request_data.type.class|generate_import }}
+{% for request_data in vars.requests.types.values() %}
+{{ request_data.class|generate_import }}
 {% endfor %}
 
 
-REQUESTS_REGISTERED_TYPES = [{% for request_data in vars.requests.values() %}{{ request_data.type.class|base_name }}(), {% endfor %}]
+REQUESTS_REGISTERED_TYPES = [{% for request_data in vars.requests.types.values() %}{{ request_data.class|base_name }}(), {% endfor %}]
 
 {% if not vars.record_resolver.skip %}
 REQUESTS_ENTITY_RESOLVERS = [
