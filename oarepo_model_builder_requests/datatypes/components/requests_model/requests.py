@@ -153,7 +153,7 @@ class RequestsComponent(DataTypeComponent):
             )  # accept action
             request_type_data.setdefault(
                 "id",
-                f"{datatype.definition['module']['prefix-snake']}_{snake_case(request_name).replace('-', '_')}",
+                f"{snake_case(datatype.definition['model-name']).replace('-', '_')}_{snake_case(request_name).replace('-', '_')}",
             )
             request_actions = request_type_data.setdefault("actions", {})
             for action_name, action_input_data in request_actions.items():
@@ -244,6 +244,7 @@ class RequestsComponent(DataTypeComponent):
             "additional-args",
             [
                 f"record_service=self.service_records",
+                "oarepo_requests_service={{oarepo_requests.proxies.current_oarepo_requests_service}}"
             ],
         )
         service.setdefault("skip", False)
