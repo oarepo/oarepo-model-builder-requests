@@ -1,6 +1,9 @@
 {% for arg in vars.resource.additional_args %}
 {{arg|code_imports}}
 {% endfor %}
+{% for arg in vars.service.additional_args %}
+{{arg|code_imports}}
+{% endfor %}
 
 class {{ vars.ext|class_header }}:
     {% if not vars.service.skip %}
