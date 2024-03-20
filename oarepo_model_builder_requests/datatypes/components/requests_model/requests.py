@@ -123,12 +123,21 @@ class RequestsComponent(DataTypeComponent):
         # TODO add link to url prefix of the record requests resource
         if datatype.root.profile == "record":
             section.config["links_item"] += [
+                # oarepo_requests.utils.is_record
                 Link(
                     name="requests",
-                    link_class="RecordLink",
-                    link_args=[f'"{{+api}}{url_prefix}{{id}}/requests"'],
-                    imports=[Import("invenio_records_resources.services.RecordLink")],
-                )
+                    link_class="ConditionalLink",
+                    link_args=[
+                        "cond=is_record",
+                        f'if_=RecordLink("{{+api}}{url_prefix}{{id}}/requests")',
+                        f'else_=RecordLink("{{+api}}{url_prefix}{{id}}/draft/requests")',
+                    ],
+                    imports=[
+                        Import("invenio_records_resources.services.ConditionalLink"),
+                        Import("invenio_records_resources.services.RecordLink"),
+                        Import("oarepo_requests.utils.is_record"),
+                    ],
+                ),
             ]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
@@ -244,7 +253,7 @@ class RequestsComponent(DataTypeComponent):
             "additional-args",
             [
                 f"record_service=self.service_records",
-                "oarepo_requests_service={{oarepo_requests.proxies.current_oarepo_requests_service}}"
+                "oarepo_requests_service={{oarepo_requests.proxies.current_oarepo_requests_service}}",
             ],
         )
         service.setdefault("skip", False)
