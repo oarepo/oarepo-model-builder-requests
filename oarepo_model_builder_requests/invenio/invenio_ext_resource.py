@@ -1,4 +1,3 @@
-
 from oarepo_model_builder_requests.invenio.overriding_builder import OverridingBuilder
 
 
