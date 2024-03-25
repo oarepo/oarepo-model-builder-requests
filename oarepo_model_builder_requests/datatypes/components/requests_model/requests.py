@@ -104,6 +104,21 @@ class RequestsSchema(ma.Schema):
     resource = ma.fields.Nested(
         ResourceClassSchema, metadata={"doc": "Requests resource settings"}
     )
+    additional_resolvers = ma.fields.List(
+        ma.fields.String(),
+        attribute="additional-resolvers",
+        data_key="additional-resolvers",
+        metadata={"doc": "Entity resolvers other than the ones generated with model"},
+    )
+    additional_ui_resolvers = ma.fields.Dict(
+        keys=ma.fields.String(),
+        values=ma.fields.String(),
+        attribute="additional-ui-resolvers",
+        data_key="additional-ui-resolvers",
+        metadata={
+            "doc": "Entity ui resolvers other than the ones generated with model"
+        },
+    )
 
 
 class RequestsComponent(DataTypeComponent):
@@ -257,3 +272,17 @@ class RequestsComponent(DataTypeComponent):
             ],
         )
         service.setdefault("skip", False)
+
+        requests.setdefault(
+            "additional-resolvers",
+            [
+                "{{oarepo_runtime.records.entity_resolvers.UserResolver}}()",
+                "{{oarepo_runtime.records.entity_resolvers.GroupResolver}}()",
+            ],
+        )
+        requests.setdefault(
+            "additional-ui-resolvers",
+            {
+                '"user"': "{{oarepo_requests.resolvers.ui.user_entity_reference_ui_resolver}}"
+            },
+        )
