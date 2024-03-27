@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from oarepo_model_builder.utils.python_name import module_to_path
@@ -20,6 +21,7 @@ class InvenioRequestsTypesBuilder(InvenioRequestsBuilder):
                 continue
             module = request["module"]
             python_path = Path(module_to_path(module) + ".py")
+            request_name = re.sub("[_-]", " ", request_name.capitalize())
 
             self.process_template(
                 python_path,

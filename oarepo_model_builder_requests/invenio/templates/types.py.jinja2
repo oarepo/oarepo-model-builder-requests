@@ -2,11 +2,12 @@
 {{ action.class|generate_import }}
 {% endfor %}
 {{ request|generate_import }}
+from oarepo_runtime.i18n import lazy_gettext as _
 
 class {{ request|class_header }}:
 
     type_id = "{{ request.id }}"
-    name = "{{ request_name.capitalize() }}"
+    name = _("{{ request_name }}")
 
     available_actions = {
         {% for bc in request.base_classes %}
