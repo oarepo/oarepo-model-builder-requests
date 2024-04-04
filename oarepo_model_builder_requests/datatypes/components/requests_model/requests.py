@@ -283,6 +283,6 @@ class RequestsComponent(DataTypeComponent):
             {
                 '"user"': '{{oarepo_requests.resolvers.ui.UserEntityReferenceUIResolver}}("user")',
                 '"fallback"': '{{oarepo_requests.resolvers.ui.FallbackEntityReferenceUIResolver}}("fallback")',
-                '"group"': '{{oarepo_requests.resolvers.ui.GroupEntityReferenceUIResolver}}("group")'
+                '"group"': '{{oarepo_requests.resolvers.ui.GroupEntityReferenceUIResolver}}("group")',
             },
         )
