@@ -11,9 +11,9 @@ class UIRecordResolverClassSchema(ma.Schema):
         unknown = ma.RAISE
 
     generate = ma.fields.Bool()
-    function_ = ma.fields.Str(
-        attribute="function",
-        data_key="function",
+    class_ = ma.fields.Str(
+        attribute="class",
+        data_key="class",
     )
     extra_code = ma.fields.Str(
         attribute="extra-code",
@@ -55,11 +55,11 @@ class UIRecordResolverComponent(DataTypeComponent):
         ui_record_resolver.setdefault("generate", True)
         if profile == "record":
             ui_record_resolver.setdefault(
-                "function",
-                "oarepo_requests.resolvers.ui.record_entity_reference_ui_resolver",
+                "class",
+                "oarepo_requests.resolvers.ui.RecordEntityReferenceUIResolver",
             )
         elif profile == "draft":
             ui_record_resolver.setdefault(
-                "function",
-                "oarepo_requests.resolvers.ui.draft_record_entity_reference_ui_resolver",
+                "class",
+                "oarepo_requests.resolvers.ui.RecordEntityDraftReferenceUIResolver",
             )

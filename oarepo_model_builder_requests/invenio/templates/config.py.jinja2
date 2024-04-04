@@ -9,7 +9,7 @@
 {% for resolver in vars.requests.additional_ui_resolvers.values() %}
 {{ resolver|code_imports }}
 {% endfor %}
-{{ vars.ui_record_resolver.function|generate_import }}
+{{ vars.ui_record_resolver.class|generate_import }}
 {% endif %}
 {% for request_data in vars.requests.types.values() %}
 {{ request_data.class|generate_import }}
@@ -27,7 +27,7 @@ REQUESTS_ENTITY_RESOLVERS = [
 {% if not vars.ui_record_resolver.skip %}
 ENTITY_REFERENCE_UI_RESOLVERS = {
         {{ vars.requests.additional_ui_resolvers|generate_dict }},
-        "{{ vars.module.prefix_snake }}": {{ vars.ui_record_resolver.function|base_name }},
+        "{{ vars.module.prefix_snake }}": {{ vars.ui_record_resolver.class|base_name }}("{{ vars.module.prefix_snake }}"),
     }
 {% endif %}
 

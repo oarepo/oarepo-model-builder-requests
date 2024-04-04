@@ -281,6 +281,8 @@ class RequestsComponent(DataTypeComponent):
         requests.setdefault(
             "additional-ui-resolvers",
             {
-                '"user"': "{{oarepo_requests.resolvers.ui.user_entity_reference_ui_resolver}}"
+                '"user"': '{{oarepo_requests.resolvers.ui.UserEntityReferenceUIResolver}}("user")',
+                '"fallback"': '{{oarepo_requests.resolvers.ui.FallbackEntityReferenceUIResolver}}("fallback")',
+                '"group"': '{{oarepo_requests.resolvers.ui.GroupEntityReferenceUIResolver}}("group")'
             },
         )
