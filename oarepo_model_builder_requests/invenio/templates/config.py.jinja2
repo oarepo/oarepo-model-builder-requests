@@ -29,5 +29,6 @@ ENTITY_REFERENCE_UI_RESOLVERS = {
         {{ vars.requests.additional_ui_resolvers|generate_dict }},
         "{{ vars.module.prefix_snake }}": {{ vars.ui_record_resolver.class|base_name }}("{{ vars.module.prefix_snake }}"),
     }
+REQUESTS_UI_SERIALIZATION_REFERENCED_FIELDS = [{{ vars.requests.ui_serialization_referenced_fields|generate_list }}]
 {% endif %}
 
