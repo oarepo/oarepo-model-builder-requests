@@ -119,6 +119,12 @@ class RequestsSchema(ma.Schema):
             "doc": "Entity ui resolvers other than the ones generated with model"
         },
     )
+    ui_serialization_referenced_fields = ma.fields.List(
+        ma.fields.Str(),
+        attribute="ui-serialization-referenced-fields",
+        data_key="ui-serialization-referenced-fields",
+        metadata={"doc": "List of field names resolved during ui serialization"},
+    )
 
 
 class RequestsComponent(DataTypeComponent):
@@ -281,6 +287,12 @@ class RequestsComponent(DataTypeComponent):
         requests.setdefault(
             "additional-ui-resolvers",
             {
-                '"user"': "{{oarepo_requests.resolvers.ui.user_entity_reference_ui_resolver}}"
+                '"user"': '{{oarepo_requests.resolvers.ui.UserEntityReferenceUIResolver}}("user")',
+                '"fallback"': '{{oarepo_requests.resolvers.ui.FallbackEntityReferenceUIResolver}}("fallback")',
+                '"group"': '{{oarepo_requests.resolvers.ui.GroupEntityReferenceUIResolver}}("group")',
             },
+        )
+        requests.setdefault(
+            "ui-serialization-referenced-fields",
+            ['"created_by"', '"receiver"', '"topic"'],
         )
