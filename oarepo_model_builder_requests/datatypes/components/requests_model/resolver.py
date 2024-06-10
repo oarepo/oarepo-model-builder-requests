@@ -78,3 +78,8 @@ class RecordResolverComponent(DataTypeComponent):
                 "custom-proxy-class",
                 "oarepo_runtime.records.entity_resolvers.DraftProxy",
             )
+        else:
+            record_resolver.setdefault(
+                "custom-proxy-class",
+                "oarepo_runtime.records.entity_resolvers.RecordProxy",
+            )
