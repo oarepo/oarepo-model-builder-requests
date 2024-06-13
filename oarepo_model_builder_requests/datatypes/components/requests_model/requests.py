@@ -279,20 +279,13 @@ class RequestsComponent(DataTypeComponent):
 
         requests.setdefault(
             "additional-resolvers",
-            [
-                "{{oarepo_runtime.records.entity_resolvers.UserResolver}}()",
-                "{{oarepo_runtime.records.entity_resolvers.GroupResolver}}()",
-            ],
+            [],
         )
         requests.setdefault(
             "additional-ui-resolvers",
-            {
-                '"user"': '{{oarepo_requests.resolvers.ui.UserEntityReferenceUIResolver}}("user")',
-                '"fallback"': '{{oarepo_requests.resolvers.ui.FallbackEntityReferenceUIResolver}}("fallback")',
-                '"group"': '{{oarepo_requests.resolvers.ui.GroupEntityReferenceUIResolver}}("group")',
-            },
+            {},
         )
         requests.setdefault(
             "ui-serialization-referenced-fields",
-            ['"created_by"', '"receiver"', '"topic"'],
+            [],
         )

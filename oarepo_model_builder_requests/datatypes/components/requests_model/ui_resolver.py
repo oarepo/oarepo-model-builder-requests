@@ -1,9 +1,10 @@
 import marshmallow as ma
 from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
+from oarepo_model_builder.datatypes.components.model.defaults import (
+    DefaultsModelComponent,
+)
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.validation.utils import ImportSchema
-
-from . import RequestsComponent
 
 
 class UIRecordResolverClassSchema(ma.Schema):
@@ -28,7 +29,7 @@ class UIRecordResolverClassSchema(ma.Schema):
 
 class UIRecordResolverComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
-    depends_on = [RequestsComponent]
+    depends_on = [DefaultsModelComponent]
 
     class ModelSchema(ma.Schema):
         ui_record_resolver = ma.fields.Nested(
@@ -44,10 +45,10 @@ class UIRecordResolverComponent(DataTypeComponent):
 
         ui_record_resolver = set_default(datatype, "ui-record-resolver", {})
 
-        if not datatype.definition["requests"] or profile not in {
+        if profile not in {
             "record",
             "draft",
-        }:  # resolver is now used only in requests, therefore do not generate if requests are not present
+        }:
             ui_record_resolver.setdefault("generate", False)
             ui_record_resolver.setdefault("skip", True)
             return

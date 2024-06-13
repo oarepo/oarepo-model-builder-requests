@@ -10,11 +10,38 @@ from invenio_requests.proxies import current_requests
 from invenio_requests.records.api import RequestEventFormat
 from thesis.proxies import current_service
 from thesis.records.api import ThesisRecord
+from invenio_app.factory import create_api
+import os
+
+
+APP_CONFIG = {
+    "JSONSCHEMAS_HOST": "localhost",
+    "RECORDS_REFRESOLVER_CLS": "invenio_records.resolver.InvenioRefResolver",
+    "RECORDS_REFRESOLVER_STORE": "invenio_jsonschemas.proxies.current_refresolver_store",
+    "RATELIMIT_AUTHENTICATED_USER": "200 per second",
+    "SEARCH_HOSTS": [
+        {
+            "host": os.environ.get("OPENSEARCH_HOST", "localhost"),
+            "port": os.environ.get("OPENSEARCH_PORT", "9200"),
+        }
+    ],
+    # disable redis cache
+    "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 300,
+}
+
+
+@pytest.fixture(scope="module")
+def create_app(instance_path, entry_points):
+    """Application factory fixture."""
+    return create_api
 
 
 @pytest.fixture(scope="module")
 def app_config(app_config):
     app_config["REQUESTS_REGISTERED_EVENT_TYPES"] = [LogEventType(), CommentEventType()]
+    for k, v in APP_CONFIG.items():
+        app_config[k] = v
     return app_config
 
 
@@ -134,3 +161,69 @@ def example_topic(app, db, sample_metadata_list):
         uow.register(RecordCommitOp(record, current_service.indexer, True))
         uow.commit()
         return record
+
+
+@pytest.fixture
+def sample_metadata_list():
+    return [
+        {
+            "metadata": {
+                "status": "Look follow unit civil too red.",
+                "title": "Successful town right newspaper economy point worker green.",
+            }
+        },
+        {
+            "metadata": {
+                "status": "Why opportunity available film.",
+                "title": "Defense born friend it modern.",
+            }
+        },
+        {
+            "metadata": {
+                "status": "Start training very order need west upon.",
+                "title": "Music two color activity education build dinner.",
+            }
+        },
+        {
+            "metadata": {
+                "status": "Now involve miss spring.",
+                "title": "Allow usually best.",
+            }
+        },
+        {
+            "metadata": {
+                "status": "Fire job community back.",
+                "title": "Tend treat Democrat money yet people.",
+            }
+        },
+        {
+            "metadata": {
+                "status": "Run need before final drug.",
+                "title": "Our agent bag out story set hear successful.",
+            }
+        },
+        {
+            "metadata": {
+                "status": "Method various war.",
+                "title": "Mention subject hope tend street.",
+            }
+        },
+        {
+            "metadata": {
+                "status": "Forget network shake young official tax special finally.",
+                "title": "Newspaper contain action early.",
+            }
+        },
+        {
+            "metadata": {
+                "status": "Doctor support provide but.",
+                "title": "Last house clear run establish miss.",
+            }
+        },
+        {
+            "metadata": {
+                "status": "Doctor fear participant matter base we task.",
+                "title": "Politics suddenly society staff strategy.",
+            }
+        },
+    ]
