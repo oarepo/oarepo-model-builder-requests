@@ -41,6 +41,6 @@ pip install -e "./$CODE_TEST_DIR/test_custom_classes"
 cp -r ./$CODE_TEST_DIR/requests_tests ./$BUILD_TEST_DIR/$MODEL/tests/requests
 
 ## local override
-# pip install -e ../oarepo-requests
+#pip install -e ../oarepo-runtime
 
 pytest tests/requests_tests
