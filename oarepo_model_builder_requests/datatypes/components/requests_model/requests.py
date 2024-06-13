@@ -18,74 +18,7 @@ from oarepo_model_builder.utils.python_name import (
 from oarepo_model_builder.validation.utils import ImportSchema
 
 
-class RequestActionSchema(ma.Schema):
-    class Meta:
-        unknown = ma.RAISE
-
-    module = ma.fields.String(metadata={"doc": "Class module"})
-    class_ = ma.fields.String(
-        attribute="class",
-        data_key="class",
-    )
-    generate = ma.fields.Bool()
-    base_classes = ma.fields.List(
-        ma.fields.Str(),
-        attribute="base-classes",
-        data_key="base-classes",
-        metadata={"doc": "Request action base classes"},
-    )
-    # module = ma.fields.String(metadata={"doc": "Class module"})
-    imports = ma.fields.List(
-        ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
-    )
-
-
-class RequestTypeSchema(ma.Schema):
-    class Meta:
-        unknown = ma.RAISE
-
-    module = ma.fields.String(metadata={"doc": "Class module"})
-    class_ = ma.fields.String(
-        attribute="class",
-        data_key="class",
-    )
-    generate = ma.fields.Bool()
-    base_classes = ma.fields.List(
-        ma.fields.Str(),
-        attribute="base-classes",
-        data_key="base-classes",
-        metadata={"doc": "RequestType base classes"},
-    )
-    imports = ma.fields.List(
-        ma.fields.Nested(ImportSchema), metadata={"doc": "List of python imports"}
-    )
-    allowed_receiver_ref_types = ma.fields.List(
-        ma.fields.String,
-        attribute="allowed-receiver-ref-types",
-        data_key="allowed-receiver-ref-types",
-    )
-    allowed_receiver_topic_types = ma.fields.List(
-        ma.fields.String,
-        attribute="allowed-receiver-topic-types",
-        data_key="allowed-receiver-topic-types",
-    )
-    needs_context = ma.fields.Dict(
-        keys=ma.fields.String,
-        values=ma.fields.String,
-        attribute="needs-context",
-        data_key="needs-context",
-    )
-    actions = ma.fields.Dict(
-        keys=ma.fields.Str(), values=ma.fields.Nested(RequestActionSchema)
-    )
-    id_ = ma.fields.String(attribute="id", data_key="id")
-
-
 class RequestsSchema(ma.Schema):
-    types = ma.fields.Dict(
-        keys=ma.fields.Str(),
-        values=ma.fields.Nested(RequestTypeSchema),
-    )
     api_blueprint = ma.fields.Nested(
         BlueprintSchema,
         attribute="api-blueprint",
