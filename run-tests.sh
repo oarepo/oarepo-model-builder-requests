@@ -36,11 +36,11 @@ ${PYTHON} -m venv $TESTS_VENV
 . $TESTS_VENV/bin/activate
 pip install -U setuptools pip wheel
 pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
-pip install "./$BUILD_TEST_DIR/${MODEL}[tests]"
-pip install "./$CODE_TEST_DIR/test_custom_classes"
+pip install -e "./$BUILD_TEST_DIR/${MODEL}[tests]"
+pip install -e "./$CODE_TEST_DIR/test_custom_classes"
 cp -r ./$CODE_TEST_DIR/requests_tests ./$BUILD_TEST_DIR/$MODEL/tests/requests
 
 ## local override
-#pip install -e ../oarepo-runtime
+# pip install -e ../oarepo-requests
 
-pytest $BUILD_TEST_DIR/$MODEL/tests
+pytest tests/requests_tests

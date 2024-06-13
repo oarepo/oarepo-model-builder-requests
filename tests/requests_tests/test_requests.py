@@ -4,7 +4,7 @@ from invenio_requests.customizations.event_types import CommentEventType
 from invenio_requests.records.api import RequestEvent, RequestEventFormat
 
 
-def test_custom_type_request(
+def test_delete_published_record(
     app,
     identity_simple,
     identity_simple_2,
@@ -19,11 +19,10 @@ def test_custom_type_request(
     sender_identity = identity_simple
     receiver_identity = identity_simple_2
     request_types = app.extensions["invenio-requests"].request_type_registry
-    for request_type in request_types:
-        if not request_type.__module__.startswith(
-            "thesis.records.requests."
-        ):  # not a generated request
-            continue
+
+    for request_type_id in ("delete-published-record",):
+        request_type = request_types.lookup(request_type_id)
+
         request = submit_request(
             sender_identity,
             data=request_record_input_data,
