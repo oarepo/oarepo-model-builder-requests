@@ -14,7 +14,7 @@
 
 
 {% if not vars.record_resolver.skip %}
-REQUESTS_ENTITY_RESOLVERS = [
+{{ vars.module.base_upper }}_ENTITY_RESOLVERS = [
         {{ vars.requests.additional_resolvers|generate_list(end=True) }}
         {{ vars.record_resolver.class|base_name }}(record_cls={{ vars.record.class|base_name }}, service_id="{{ vars.service_config.service_id }}", type_key="{{ vars.module.prefix_snake }}")
     ]
