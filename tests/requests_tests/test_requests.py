@@ -20,7 +20,7 @@ def test_delete_published_record(
     receiver_identity = identity_simple_2
     request_types = app.extensions["invenio-requests"].request_type_registry
 
-    for request_type_id in ("delete-published-record",):
+    for request_type_id in ("delete_published_record",):
         request_type = request_types.lookup(request_type_id)
 
         request = submit_request(
