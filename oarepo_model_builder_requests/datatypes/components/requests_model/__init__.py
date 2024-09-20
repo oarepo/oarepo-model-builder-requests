@@ -1,6 +1,6 @@
 from .ui_marshmallow import RequestsUIMarshmallowModelComponent
 from .record_item import RequestsRecordItemModelComponent
-from .requests import RequestsComponent
+from .requests import RequestsComponent, RecordRequestsResourceComponent, RecordRequestTypesResourceComponent
 from .resolver import RecordResolverComponent
 from .tests import RequestsTestComponent
 from .ui_resolver import UIRecordResolverComponent
@@ -12,4 +12,6 @@ __all__ = [
     "RequestsUIMarshmallowModelComponent",
     "UIRecordResolverComponent",
     "RequestsRecordItemModelComponent",
+    "RecordRequestsResourceComponent",
+    "RecordRequestTypesResourceComponent",
 ]

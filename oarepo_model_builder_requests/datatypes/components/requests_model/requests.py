@@ -18,7 +18,7 @@ from oarepo_model_builder.utils.python_name import (
 from oarepo_model_builder.validation.utils import ImportSchema
 
 
-class RequestsSchema(ma.Schema):
+class RecordRequestsResourceSchema(ma.Schema):
     api_blueprint = ma.fields.Nested(
         BlueprintSchema,
         attribute="api-blueprint",
@@ -37,6 +37,8 @@ class RequestsSchema(ma.Schema):
     resource = ma.fields.Nested(
         ResourceClassSchema, metadata={"doc": "Requests resource settings"}
     )
+
+class RequestsSchema(ma.Schema):
     additional_resolvers = ma.fields.List(
         ma.fields.String(),
         attribute="additional-resolvers",
@@ -59,18 +61,12 @@ class RequestsSchema(ma.Schema):
         metadata={"doc": "List of field names resolved during ui serialization"},
     )
 
-
 class RequestsComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
     depends_on = [DefaultsModelComponent, MarshmallowModelComponent]
 
     class ModelSchema(ma.Schema):
         requests = ma.fields.Nested(RequestsSchema)
-
-    def process_requests_ext_resource(self, datatype, section, **kwargs):
-        cfg = section.config
-        cfg["ext-service-name"] = "service_requests"
-        cfg["ext-resource-name"] = "resource_requests"
 
     def process_links(self, datatype, section: Section, **kwargs):
         url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])
@@ -83,6 +79,20 @@ class RequestsComponent(DataTypeComponent):
                         "cond=is_published_record",
                         f'if_=RecordLink("{{+api}}{url_prefix}{{id}}/requests")',
                         f'else_=RecordLink("{{+api}}{url_prefix}{{id}}/draft/requests")',
+                    ],
+                    imports=[
+                        Import("invenio_records_resources.services.ConditionalLink"),
+                        Import("invenio_records_resources.services.RecordLink"),
+                        Import("oarepo_runtime.records.is_published_record"),
+                    ],
+                ),
+                Link(
+                    name="applicable-requests",
+                    link_class="ConditionalLink",
+                    link_args=[
+                        "cond=is_published_record",
+                        f'if_=RecordLink("{{+api}}{url_prefix}{{id}}/requests/applicable")',
+                        f'else_=RecordLink("{{+api}}{url_prefix}{{id}}/draft/requests/applicable")',
                     ],
                     imports=[
                         Import("invenio_records_resources.services.ConditionalLink"),
@@ -131,16 +141,30 @@ class RequestsComponent(DataTypeComponent):
                 )  # accept action
                 action_input_data.setdefault("imports", [])
 
-        requests_module = "requests"
-        record_requests_config_cls = (
-            "oarepo_requests.resources.draft.config.DraftRecordRequestsResourceConfig"
+        requests.setdefault(
+            "additional-resolvers",
+            [],
+        )
+        requests.setdefault(
+            "additional-ui-resolvers",
+            {},
+        )
+        requests.setdefault(
+            "ui-serialization-referenced-fields",
+            [],
         )
 
+class PrepareRecordRequestResourceMixin:
+
+    def _before_model_prepare(self, datatype, section, name, service_cls, resource_cls, resource_config_cls, add_args):
         alias = datatype.definition["module"]["alias"]
-        requests_alias = f"{alias}_requests"
         module = datatype.definition["module"]["qualified"]
 
-        api = requests.setdefault("api-blueprint", {})
+        requests_module = name
+        requests_alias = f"{alias}_{name}"
+
+
+        api = section.setdefault("api-blueprint", {})
         api.setdefault("generate", True)
         api.setdefault("alias", requests_alias)
         # api.setdefault("extra_code", "")
@@ -155,7 +179,7 @@ class RequestsComponent(DataTypeComponent):
         api.setdefault("imports", [])
         convert_config_to_qualified_name(api, name_field="function")
 
-        app = requests.setdefault("app-blueprint", {})
+        app = section.setdefault("app-blueprint", {})
         app.setdefault("generate", True)
         app.setdefault("alias", requests_alias)
         app.setdefault("extra_code", "")
@@ -171,7 +195,7 @@ class RequestsComponent(DataTypeComponent):
         convert_config_to_qualified_name(app, name_field="function")
 
         module_container = datatype.definition["module"]
-        resource = requests.setdefault("resource", {})
+        resource = section.setdefault("resource", {})
         resource.setdefault("generate", True)
         resource.setdefault(
             "config-key",
@@ -179,18 +203,18 @@ class RequestsComponent(DataTypeComponent):
         )
         resource.setdefault(
             "class",
-            f"oarepo_requests.resources.draft.resource.DraftRecordRequestsResource",
+            resource_cls,
         )
 
         resource.setdefault(
             "additional-args",
             [
-                "record_requests_config={{" + record_requests_config_cls + "}}()",
+                "record_requests_config={{" + resource_config_cls + "}}()",
             ],
         )
         resource.setdefault("skip", False)
 
-        service = requests.setdefault("service", {})
+        service = section.setdefault("service", {})
 
         service.setdefault("generate", True)
         service.setdefault(
@@ -199,26 +223,62 @@ class RequestsComponent(DataTypeComponent):
         )
         service.setdefault(
             "class",
-            f"oarepo_requests.services.draft.service.DraftRecordRequestsService",
+            service_cls,
         )
         service.setdefault(
             "additional-args",
-            [
-                f"record_service=self.service_records",
-                "oarepo_requests_service={{oarepo_requests.proxies.current_oarepo_requests_service}}",
-            ],
+                add_args,
         )
         service.setdefault("skip", False)
+class RecordRequestsResourceComponent(PrepareRecordRequestResourceMixin, DataTypeComponent):
+    eligible_datatypes = [ModelDataType]
+    depends_on = [DefaultsModelComponent, MarshmallowModelComponent]
 
-        requests.setdefault(
-            "additional-resolvers",
-            [],
-        )
-        requests.setdefault(
-            "additional-ui-resolvers",
-            {},
-        )
-        requests.setdefault(
-            "ui-serialization-referenced-fields",
-            [],
-        )
+    class ModelSchema(ma.Schema):
+        record_requests = ma.fields.Nested(RecordRequestsResourceSchema)
+
+    def process_record_requests_ext_resource(self, datatype, section, **kwargs):
+        cfg = section.config
+        cfg["ext-service-name"] = "service_record_requests"
+        cfg["ext-resource-name"] = "resource_record_requests"
+
+
+    def before_model_prepare(self, datatype, *, context, **kwargs):
+        section = set_default(datatype, "record-requests", {})
+
+        name = "requests"
+        service_cls = "oarepo_requests.services.draft.service.DraftRecordRequestsService"
+        resource_cls = "oarepo_requests.resources.draft.resource.DraftRecordRequestsResource"
+        resource_config_cls = "oarepo_requests.resources.draft.config.DraftRecordRequestsResourceConfig"
+        add_args = [
+            f"record_service=self.service_records",
+            "oarepo_requests_service={{oarepo_requests.proxies.current_oarepo_requests_service}}"
+        ]
+        self._before_model_prepare(datatype, section, name, service_cls, resource_cls, resource_config_cls, add_args)
+
+
+class RecordRequestTypesResourceComponent(PrepareRecordRequestResourceMixin, DataTypeComponent):
+    eligible_datatypes = [ModelDataType]
+    depends_on = [DefaultsModelComponent, MarshmallowModelComponent]
+
+    class ModelSchema(ma.Schema):
+        record_request_types = ma.fields.Nested(RecordRequestsResourceSchema)
+
+    def process_record_request_types_ext_resource(self, datatype, section, **kwargs):
+        cfg = section.config
+        cfg["ext-service-name"] = "service_record_request_types"
+        cfg["ext-resource-name"] = "resource_record_request_types"
+
+
+    def before_model_prepare(self, datatype, *, context, **kwargs):
+        section = set_default(datatype, "record-request-types", {})
+
+        name = "request_types"
+        service_cls = "oarepo_requests.services.draft.types.service.DraftRecordRequestTypesService"
+        resource_cls = "oarepo_requests.resources.draft.types.resource.DraftRequestTypesResource"
+        resource_config_cls = "oarepo_requests.resources.draft.types.config.DraftRequestTypesResourceConfig"
+        add_args = [
+            f"record_service=self.service_records",
+            "oarepo_requests_service={{oarepo_requests.proxies.current_oarepo_requests_service}}"
+        ]
+        self._before_model_prepare(datatype, section, name, service_cls, resource_cls, resource_config_cls, add_args)
