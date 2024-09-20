@@ -1,18 +1,18 @@
+import os
+
 import pytest
 from flask_principal import Identity, Need, UserNeed
 from flask_security.utils import hash_password
 from invenio_access.models import ActionRoles
 from invenio_access.permissions import superuser_access
 from invenio_accounts.models import Role
+from invenio_app.factory import create_api
 from invenio_records_resources.services.uow import RecordCommitOp, UnitOfWork
 from invenio_requests.customizations import CommentEventType, LogEventType
 from invenio_requests.proxies import current_requests
 from invenio_requests.records.api import RequestEventFormat
 from thesis.proxies import current_service
 from thesis.records.api import ThesisRecord
-from invenio_app.factory import create_api
-import os
-
 
 APP_CONFIG = {
     "JSONSCHEMAS_HOST": "localhost",

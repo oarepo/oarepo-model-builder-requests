@@ -1,8 +1,12 @@
-from .ui_marshmallow import RequestsUIMarshmallowModelComponent
 from .record_item import RequestsRecordItemModelComponent
-from .requests import RequestsComponent, RecordRequestsResourceComponent, RecordRequestTypesResourceComponent
+from .requests import (
+    RecordRequestsResourceComponent,
+    RecordRequestTypesResourceComponent,
+    RequestsComponent,
+)
 from .resolver import RecordResolverComponent
 from .tests import RequestsTestComponent
+from .ui_marshmallow import RequestsUIMarshmallowModelComponent
 from .ui_resolver import UIRecordResolverComponent
 
 __all__ = [

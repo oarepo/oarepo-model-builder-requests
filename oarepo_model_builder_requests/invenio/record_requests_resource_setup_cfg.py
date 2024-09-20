@@ -5,9 +5,7 @@ from oarepo_model_builder.outputs.cfg import CFGOutput
 from oarepo_model_builder.utils.python_name import split_package_base_name
 
 
-class RecordRequestsResourceSetupCfgBuilder(
-    InvenioRecordResourceSetupCfgBuilder
-):
+class RecordRequestsResourceSetupCfgBuilder(InvenioRecordResourceSetupCfgBuilder):
     TYPE = "record_requests_resource_setup_cfg"
     key = "record-requests"
 
