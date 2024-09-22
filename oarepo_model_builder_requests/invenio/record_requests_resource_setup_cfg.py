@@ -5,14 +5,13 @@ from oarepo_model_builder.outputs.cfg import CFGOutput
 from oarepo_model_builder.utils.python_name import split_package_base_name
 
 
-class InvenioRecordRequestsResourceSetupCfgBuilder(
-    InvenioRecordResourceSetupCfgBuilder
-):
-    TYPE = "invenio_record_requests_resource_setup_cfg"
+class RecordRequestsResourceSetupCfgBuilder(InvenioRecordResourceSetupCfgBuilder):
+    TYPE = "record_requests_resource_setup_cfg"
+    key = "record-requests"
 
     def finish(self):
         super().finish()
-        definition = self.current_model.definition["requests"]
+        definition = self.current_model.definition[self.key]
         output: CFGOutput = self.builder.get_output("cfg", "setup.cfg")
 
         register_function = split_package_base_name(
@@ -26,11 +25,11 @@ class InvenioRecordRequestsResourceSetupCfgBuilder(
         )
 
         register_function = split_package_base_name(
-            definition["api-blueprint"]["function"]
+            definition["app-blueprint"]["function"]
         )
 
         output.add_entry_point(
             "invenio_base.blueprints",
-            definition["api-blueprint"]["alias"],
+            definition["app-blueprint"]["alias"],
             f"{register_function[0]}:{register_function[-1]}",
         )
