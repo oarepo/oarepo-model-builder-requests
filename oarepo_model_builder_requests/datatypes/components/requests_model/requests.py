@@ -77,30 +77,30 @@ class RequestsComponent(DataTypeComponent):
                     name="requests",
                     link_class="ConditionalLink",
                     link_args=[
-                        "cond=is_published_record",
+                        "cond=is_published_record()",
                         f'if_=RecordLink("{{+api}}{url_prefix}{{id}}/requests", when=has_permission("read"))',
                         f'else_=RecordLink("{{+api}}{url_prefix}{{id}}/draft/requests", when=has_permission("read"))',
                     ],
                     imports=[
                         Import("invenio_records_resources.services.ConditionalLink"),
                         Import("invenio_records_resources.services.RecordLink"),
-                        Import("oarepo_runtime.records.is_published_record"),
-                        Import("oarepo_runtime.records.has_permission"),
+                        Import("oarepo_runtime.services.config.is_published_record"),
+                        Import("oarepo_runtime.services.config.has_permission"),
                     ],
                 ),
                 Link(
                     name="applicable-requests",
                     link_class="ConditionalLink",
                     link_args=[
-                        "cond=is_published_record",
+                        "cond=is_published_record()",
                         f'if_=RecordLink("{{+api}}{url_prefix}{{id}}/requests/applicable", when=has_permission("read"))',
                         f'else_=RecordLink("{{+api}}{url_prefix}{{id}}/draft/requests/applicable", when=has_permission("read"))',
                     ],
                     imports=[
                         Import("invenio_records_resources.services.ConditionalLink"),
                         Import("invenio_records_resources.services.RecordLink"),
-                        Import("oarepo_runtime.records.is_published_record"),
-                        Import("oarepo_runtime.records.has_permission"),
+                        Import("oarepo_runtime.services.config.is_published_record"),
+                        Import("oarepo_runtime.services.config.has_permission"),
                     ],
                 ),
             ]
