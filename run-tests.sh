@@ -16,31 +16,28 @@ if test -d $BUILDER_VENV ; then
 	rm -rf $BUILDER_VENV
 fi
 
-${PYTHON} -m venv $BUILDER_VENV
+uv venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
-pip install -U setuptools pip wheel
-pip install -e .
+uv pip install -U setuptools pip wheel
+uv pip install -e .
 
 
 if test -d $BUILD_TEST_DIR; then
   rm -rf $BUILD_TEST_DIR
 fi
-
 oarepo-compile-model ./$CODE_TEST_DIR/$MODEL.yaml --output-directory ./$BUILD_TEST_DIR/$MODEL -vvv
 
 if test -d $TESTS_VENV; then
 	rm -rf $TESTS_VENV
 fi
 
-${PYTHON} -m venv $TESTS_VENV
+uv venv $TESTS_VENV
 . $TESTS_VENV/bin/activate
-pip install -U setuptools pip wheel
-pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
-pip install -e "./$BUILD_TEST_DIR/${MODEL}[tests]"
-pip install -e "./$CODE_TEST_DIR/test_custom_classes"
+uv pip install -U setuptools pip wheel
+uv pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
+uv pip install -e "./$BUILD_TEST_DIR/${MODEL}[tests]"
+uv pip install -e "./$CODE_TEST_DIR/test_custom_classes"
+uv pip install pytest-invenio==2.*
 cp -r ./$CODE_TEST_DIR/requests_tests ./$BUILD_TEST_DIR/$MODEL/tests/requests
-
-## local override
-#pip install -e ../oarepo-runtime
 
 pytest tests/requests_tests
