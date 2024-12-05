@@ -9,7 +9,7 @@ BUILD_TEST_DIR="build-tests"
 
 OAREPO_VERSION=${OAREPO_VERSION:-12}
 OAREPO_VERSION_MAX=$((OAREPO_VERSION+1))
-PYTHON="${PYTHON:-python3.10}"
+PYTHON="${PYTHON:-python3.12}"
 
 BUILDER_VENV=".venv-builder"
 if test -d $BUILDER_VENV ; then
