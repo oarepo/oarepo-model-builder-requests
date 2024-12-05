@@ -28,6 +28,7 @@ APP_CONFIG = {
     # disable redis cache
     "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
     "CACHE_DEFAULT_TIMEOUT": 300,
+    "OAREPO_WORKFLOWS_SET_REQUEST_PERMISSIONS": False
 }
 
 

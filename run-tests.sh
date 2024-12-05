@@ -9,7 +9,7 @@ BUILD_TEST_DIR="build-tests"
 
 OAREPO_VERSION=${OAREPO_VERSION:-12}
 OAREPO_VERSION_MAX=$((OAREPO_VERSION+1))
-PYTHON="${PYTHON:-python3.10}"
+PYTHON="${PYTHON:-python3.12}"
 
 BUILDER_VENV=".venv-builder"
 if test -d $BUILDER_VENV ; then
@@ -35,6 +35,7 @@ fi
 ${PYTHON} -m venv $TESTS_VENV
 . $TESTS_VENV/bin/activate
 pip install -U setuptools pip wheel
+pip install pytest-invenio==2.*
 pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
 pip install -e "./$BUILD_TEST_DIR/${MODEL}[tests]"
 pip install -e "./$CODE_TEST_DIR/test_custom_classes"
