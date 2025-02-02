@@ -36,7 +36,7 @@ ${PYTHON} -m venv $TESTS_VENV
 . $TESTS_VENV/bin/activate
 pip install -U setuptools pip wheel
 pip install pytest-invenio==2.*
-pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
+pip install "oarepo[tests,rdm]>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
 pip install -e "./$BUILD_TEST_DIR/${MODEL}[tests]"
 pip install -e "./$CODE_TEST_DIR/test_custom_classes"
 cp -r ./$CODE_TEST_DIR/requests_tests ./$BUILD_TEST_DIR/$MODEL/tests/requests
