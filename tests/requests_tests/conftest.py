@@ -28,7 +28,11 @@ APP_CONFIG = {
     # disable redis cache
     "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
     "CACHE_DEFAULT_TIMEOUT": 300,
-    "OAREPO_WORKFLOWS_SET_REQUEST_PERMISSIONS": False
+    "OAREPO_WORKFLOWS_SET_REQUEST_PERMISSIONS": False,
+    "SQLALCHEMY_ENGINE_OPTIONS": { # hack to avoid pool_timeout set in invenio_app_rdm
+        "pool_pre_ping": False,
+        "pool_recycle": 3600
+    }
 }
 
 

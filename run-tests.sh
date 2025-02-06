@@ -11,6 +11,9 @@ OAREPO_VERSION=${OAREPO_VERSION:-12}
 OAREPO_VERSION_MAX=$((OAREPO_VERSION+1))
 PYTHON="${PYTHON:-python3.12}"
 
+export PIP_EXTRA_INDEX_URL=https://gitlab.cesnet.cz/api/v4/projects/1408/packages/pypi/simple
+export UV_EXTRA_INDEX_URL=https://gitlab.cesnet.cz/api/v4/projects/1408/packages/pypi/simple
+
 BUILDER_VENV=".venv-builder"
 if test -d $BUILDER_VENV ; then
 	rm -rf $BUILDER_VENV
