@@ -1,3 +1,5 @@
+from invenio_records_resources.references.entity_resolvers import ServiceResultResolver
+
 {{ vars.record.class|generate_import }}
 {% if not vars.record_resolver.skip %}
 {% for resolver in vars.requests.additional_resolvers %}
@@ -26,5 +28,9 @@ ENTITY_REFERENCE_UI_RESOLVERS = {
     }
 REQUESTS_UI_SERIALIZATION_REFERENCED_FIELDS = [
     {{ vars.requests.ui_serialization_referenced_fields|generate_list }}
+]
+
+NOTIFICATIONS_ENTITY_RESOLVERS = [
+    ServiceResultResolver(service_id="{{vars.service_config.service_id}}", type_key="{{vars.service_config.service_id}}")
 ]
 {% endif %}
