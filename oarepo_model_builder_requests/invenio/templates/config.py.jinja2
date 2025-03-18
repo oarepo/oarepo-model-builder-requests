@@ -11,7 +11,9 @@
 {% endfor %}
 {{ vars.ui_record_resolver.class|generate_import }}
 {% endif %}
-
+{% for resolver in vars.requests.notification_resolver %}
+{{ resolver|code_imports }}
+{% endfor %}
 
 {% if not vars.record_resolver.skip %}
 {{ vars.module.base_upper }}_ENTITY_RESOLVERS = [
@@ -27,4 +29,5 @@ ENTITY_REFERENCE_UI_RESOLVERS = {
 REQUESTS_UI_SERIALIZATION_REFERENCED_FIELDS = [
     {{ vars.requests.ui_serialization_referenced_fields|generate_list }}
 ]
+NOTIFICATIONS_ENTITY_RESOLVERS = [{{ vars.requests.notification_resolver|generate_list }}]
 {% endif %}
