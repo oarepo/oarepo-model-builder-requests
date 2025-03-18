@@ -64,7 +64,7 @@ class RequestsSchema(ma.Schema):
 
     notification_resolver = ma.fields.Str(attribute="notification-resolver",
         data_key="notification-resolver",
-        metadata={"doc": "API blueprint details"})
+        metadata={"doc": "Resolver used to resolve the topic in notification processing."})
 
 
 class RequestsComponent(DataTypeComponent):
