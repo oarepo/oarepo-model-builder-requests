@@ -3,6 +3,7 @@ from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType, Sec
 from oarepo_model_builder.datatypes.components import (
     DefaultsModelComponent,
     MarshmallowModelComponent,
+    ServiceModelComponent
 )
 from oarepo_model_builder.datatypes.components.model.blueprints import BlueprintSchema
 from oarepo_model_builder.datatypes.components.model.resource import ResourceClassSchema
@@ -61,10 +62,14 @@ class RequestsSchema(ma.Schema):
         metadata={"doc": "List of field names resolved during ui serialization"},
     )
 
+    notification_resolver = ma.fields.Str(attribute="notification-resolver",
+        data_key="notification-resolver",
+        metadata={"doc": "Resolver used to resolve the topic in notification processing."})
+
 
 class RequestsComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
-    depends_on = [DefaultsModelComponent, MarshmallowModelComponent]
+    depends_on = [DefaultsModelComponent, MarshmallowModelComponent, ServiceModelComponent]
 
     class ModelSchema(ma.Schema):
         requests = ma.fields.Nested(RequestsSchema)
@@ -154,7 +159,16 @@ class RequestsComponent(DataTypeComponent):
             "ui-serialization-referenced-fields",
             [],
         )
+        service_id = datatype.definition["service-config"]["service-id"]
+        type_key = datatype.definition["module"]["prefix-snake"]
+        resolver_cls = '{{invenio_records_resources.references.entity_resolvers.results.ServiceResultResolver}}'
+        resolver_args = f'service_id="{service_id}", type_key="{type_key}"'
+        if datatype.root.profile == "draft":
+            resolver_cls = "{{oarepo_requests.resolvers.service_result.DraftServiceResultResolver}}"
+            proxy = "proxy_cls={{invenio_rdm_records.requests.entity_resolvers.RDMRecordServiceResultProxy}}"
+            resolver_args = resolver_args + f",{proxy}"
 
+        requests.setdefault("notification-resolver", [f"{resolver_cls}({resolver_args})"]) #list because the double brackets class decomposition doesn't work on simple string
 
 class PrepareRecordRequestResourceMixin:
 
