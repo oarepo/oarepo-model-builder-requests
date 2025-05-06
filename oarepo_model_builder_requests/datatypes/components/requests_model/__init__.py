@@ -5,6 +5,7 @@ from .requests import (
     RequestsComponent,
 )
 from .resolver import RecordResolverComponent
+from .service import RequestsServiceModelComponent
 from .tests import RequestsTestComponent
 from .ui_marshmallow import RequestsUIMarshmallowModelComponent
 from .ui_resolver import UIRecordResolverComponent
@@ -18,4 +19,5 @@ __all__ = [
     "RequestsRecordItemModelComponent",
     "RecordRequestsResourceComponent",
     "RecordRequestTypesResourceComponent",
+    "RequestsServiceModelComponent",
 ]
