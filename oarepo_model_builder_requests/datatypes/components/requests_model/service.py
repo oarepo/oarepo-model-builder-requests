@@ -1,9 +1,9 @@
 from oarepo_model_builder.datatypes import DataType, ModelDataType
-from oarepo_model_builder.datatypes.components import ServiceModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
+from oarepo_model_builder.datatypes import DataTypeComponent
+from oarepo_model_builder.datatypes.components.model.service import ServiceModelComponent
 
-
-class RequestsServiceModelComponent(ServiceModelComponent):
+class RequestsServiceModelComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
     depends_on = [ServiceModelComponent]
 
