@@ -1,3 +1,4 @@
+from oarepo_runtime.config import build_config
 {% for arg in vars.resource.additional_args %}
 {{arg|code_imports}}
 {% endfor %}
@@ -21,7 +22,7 @@ class {{ vars.ext|class_header }}:
     def {{ ext.ext_resource_name }}(self):
         return config.{{ vars.resource.config_key }}(
             service=self.{{ ext.ext_service_name }},
-            config=config.{{ vars.resource_config.config_key }}(),
+            config=build_config(config.{{ vars.resource_config.config_key }}, self.app),
             {% if vars.resource.additional_args %}
                 {{ vars.resource.additional_args|generate_list }}
             {% endif %}
