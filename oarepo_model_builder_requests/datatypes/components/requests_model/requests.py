@@ -167,6 +167,9 @@ class RequestsComponent(DataTypeComponent):
             resolver_cls = "{{oarepo_requests.resolvers.service_result.DraftServiceResultResolver}}"
             proxy = "proxy_cls={{invenio_rdm_records.requests.entity_resolvers.RDMRecordServiceResultProxy}}"
             resolver_args = resolver_args + f",{proxy}"
+        elif datatype.root.profile == "record":
+            proxy = "proxy_cls={{oarepo_runtime.records.entity_resolvers.proxies.WithDeletedServiceResultProxy}}"
+            resolver_args = resolver_args + f",{proxy}"
 
         requests.setdefault("notification-resolver", [f"{resolver_cls}({resolver_args})"]) #list because the double brackets class decomposition doesn't work on simple string
 
