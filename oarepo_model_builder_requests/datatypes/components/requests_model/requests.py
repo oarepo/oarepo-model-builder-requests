@@ -161,7 +161,7 @@ class RequestsComponent(DataTypeComponent):
         )
         service_id = datatype.definition["service-config"]["service-id"]
         type_key = datatype.definition["module"]["prefix-snake"]
-        resolver_cls = '{{invenio_records_resources.references.entity_resolvers.results.ServiceResultResolver}}'
+        resolver_cls = '{{oarepo_requests.resolvers.service_result.RDMPIDServiceResultResolver}}'
         resolver_args = f'service_id="{service_id}", type_key="{type_key}"'
         if datatype.root.profile == "draft":
             resolver_cls = "{{oarepo_requests.resolvers.service_result.DraftServiceResultResolver}}"
